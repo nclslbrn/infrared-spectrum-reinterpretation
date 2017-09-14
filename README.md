@@ -9,4 +9,6 @@ Infrared spectrum come from NIST (National Institute of Standards and Technology
 due to a server limitation we have to download files manually from [nist.gov](http://webbook.nist.gov/chemistry/name-ser/)
 and put into this script.
 
+![flask](https://raw.githubusercontent.com/nclslbrn/infrared-spectrum-reinterpretation/master/favicon-flask.ico "Favicon of the website")
+
 This project is produced within the framework of a part of the COSA research group, which studies relation between art and science.

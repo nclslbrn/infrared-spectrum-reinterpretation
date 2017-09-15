@@ -5,7 +5,7 @@ This project is a tool for reinterpret, transcode infrared analysis of various m
 - sounds
 - motion keys
 
-Infrared spectrum come from NIST (National Institute of Standards and Technology - U.S. Department of Commerce),
+Infrared spectrums come from NIST (National Institute of Standards and Technology - U.S. Department of Commerce),
 due to a server limitation we have to download files manually from [nist.gov](http://webbook.nist.gov/chemistry/name-ser/)
 and put into this script.
 

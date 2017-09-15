@@ -39,7 +39,7 @@ function chart_this( molecule_ir_data ) {
     .call(d3.axisBottom(x))
     .attr("class", "axisWhite")
     .append("text")
-    .attr("transform", "translate(" + width + ", -10)")
+    .attr("transform", "translate(" + ( width - 60 ) + ", -10)")
     .attr("class", 'legend')
     .text("Wavelength");
    // Add the Y Axis
@@ -54,5 +54,4 @@ function chart_this( molecule_ir_data ) {
     .attr("class", 'legend')
     .text("Transmitance");
 
-  console.log(ir_data);
 }

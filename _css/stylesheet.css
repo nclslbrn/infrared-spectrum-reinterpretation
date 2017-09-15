@@ -15,7 +15,7 @@ body {
   margin: 0 auto;
 }
 .app-wrapper #canvas-wrapper,
-.app-wrapper #data-comments {
+.app-wrapper aside {
   display: block;
   min-height: 800px;
 }
@@ -23,16 +23,33 @@ body {
   width: 75%;
   float: left;
 }
-.app-wrapper #data-comments {
+.app-wrapper aside {
   width: 15%;
   float: right;
   padding: 20px 5px;
 }
-.app-wrapper #data-comments p {
+.app-wrapper aside select#molecule-select {
+  padding: 0 2.5rem 0 1rem;
+  line-height: 2.5rem;
+  border: 0;
+  outline:0;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 0;
+  -webkit-appearance: none;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50px' fill='white' height='40px'><polyline points='46.139,15.518 25.166,36.49 4.193,15.519'/></svg>");
+  background-color: #333;
+  background-repeat:no-repeat;
+  background-position: right 10px top 10px;
+  background-size: 16px 16px;
+  color: #fff;
+}
+.app-wrapper aside #data-comments p {
   font-size: 11px;
   line-height: 11px;
 }
 .line-chart {
+
   font-weight: lighter;
   shape-rendering: geometricPrecision
 }
@@ -49,4 +66,5 @@ body {
 }
 .line-chart .legend {
   color: #fff;
+  font-size: 18px;
 }

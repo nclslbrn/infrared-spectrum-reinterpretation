@@ -6,7 +6,7 @@
  */
 
 var molecule_ir_data = new Array();
-var molecule_selector = document.getElementById('molecule-menu');
+var molecule_select = document.getElementById('molecule-select');
 
 get_JDX_data = function loadJDX(filePath, success, error) {
 	var xhr = new XMLHttpRequest();
@@ -31,7 +31,7 @@ get_JDX_data = function loadJDX(filePath, success, error) {
  * @param line Line : Frequency + " " +  Transmitance + " " +Absorbance
  */
 function filter_JDX_data(data) {
-
+	molecule_ir_data = new Array();
   //split raw text by line
   var lines = data.split( "\n" );
 
@@ -76,5 +76,12 @@ function filter_JDX_data(data) {
 	chart_this( molecule_ir_data );
 }
 
+molecule_select.onchange = function () {
+	var elem = (typeof this.selectedIndex === "undefined" ? window.event.srcElement : this);
+  var file = elem.value || elem.options[elem.selectedIndex].value;
 
-get_JDX_data('_jcamp/64-17-5-IR.jdx',  filter_JDX_data);
+	document.getElementById('canvas-wrapper').innerHTML = "";
+	document.getElementById('data-comments').innerHTML = "";
+
+	get_JDX_data(file,  filter_JDX_data);
+}

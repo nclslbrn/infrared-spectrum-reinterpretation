@@ -9,7 +9,16 @@ This project is a tool for reinterpret, transcode infrared analysis of various m
 
 Infrared spectrums come from NIST (National Institute of Standards and Technology - U.S. Department of Commerce),
 due to a server limitation we have to download files manually from [nist.gov](http://webbook.nist.gov/chemistry/name-ser/)
-and put into a folder _jcamp/, and put each link into the <select> of index.html. Due to the loading of these by XMLHttpRequest,
+and put into a folder _jcamp/, and put each link into the `<select>` index.html file like below.
+
+```html
+<select id="molecule-select" name="molecule">
+  <option value="_jcamp/{file-name.jdx}">
+    Name of the molecule
+  </option>
+</select>
+```
+Due to the loading of these by XMLHttpRequest,
 this script could work only on server (local or distant).
 
 

@@ -9,12 +9,9 @@
   	<meta http-equiv="x-ua-compatible" content="ie=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
   	<title>Infrared Spectrum Reinterpretation :: N.Lebrun</title>
-    <!-- PRODUCTION -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script> -->
-    <!-- DEVELOPMENT -->
-    <!-- <script src="../lib/p5.min.js"></script> -->
+
+    <link rel="stylesheet" type="text/css" href="_css/stylesheet.css" media="screen, print">
     <link rel="shortcut icon" href="favicon-flask.ico">
-    <script src="infrared-spectrum-reinterpretation.js"></script>
 
     <style>
       canvas {
@@ -29,6 +26,35 @@
   </head>
 
   <body>
-    <div id="data-comments"></div>
+    <div class="app-wrapper">
+
+      <div id="canvas-wrapper">
+
+        <select id="molecule-menu" name="molecule">
+          <option value="_jcamp/64-17-5-IR.jdx">Ethanol</option>
+          <option value="_jcamp/111-65-9-IR.jdx">Octane</option>
+          <option value="_jcamp/7732-18-5-IR.jdx">Water</option>
+        </select>
+      </div>
+
+      <div id="data-comments">
+
+      </div>
+
+    </div>
+
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script src="_js/wavelength.js"></script>
+
+
+<!-- PRODUCTION -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.js"></script> -->
+<!-- DEVELOPMENT
+    <script src="../lib/p5.min.js"></script>
+-->
+  <!-- <script src="_js/p5_graph.js"></script> -->
+
+    <script src="_js/infrared-spectrum-reinterpretation.js"></script>
+
   </body>
 </html>

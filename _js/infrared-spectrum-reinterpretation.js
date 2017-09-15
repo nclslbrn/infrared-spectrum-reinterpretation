@@ -85,3 +85,5 @@ molecule_select.onchange = function () {
 
 	get_JDX_data(file,  filter_JDX_data);
 }
+
+get_JDX_data('_jcamp/111-65-9-IR.jdx',  filter_JDX_data);

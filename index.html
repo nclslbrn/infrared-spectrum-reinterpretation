@@ -23,21 +23,33 @@
       </main>
 
       <aside>
-        <select id="molecule-select" name="molecule">
-          <option value="">Select a molecule</option>
-          <option value="data/64-17-5-IR.jdx">Ethanol</option>
-          <option value="data/111-65-9-IR.jdx">Octane</option>
-          <option value="data/7732-18-5-IR.jdx">Water</option>
-        </select>
-
+        <h1>Infrared Spectrum Reinterpretation</h1>
+        <dl id="molecule-select" class="dropdown">
+          <a href="#" class="dropdown-button" data-activate="dropdown-molecule">Select a molecule</a>
+          <dd>
+            <ul>
+              <li><a class="link" href="#" data-file="data/64-17-5-IR.jdx">Ethanol</a></li>
+              <li><a class="link" href="#" data-file="data/111-65-9-IR.jdx">Octane</a></li>
+              <li><a class="link" href="#" data-file="data/7732-18-5-IR.jdx">Water</a></li>
+            </ul>
+          </dd>
+        </dl>
         <div id="data-comments"></div>
-
-      </div>
+        <div class="right">
+          <p>
+            Infrared Spectrum Reinterprettion is an open source project under MIT License,
+            see the source code on
+            <a href="https://github.com/nclslbrn/infrared-spectrum-reinterpretation" target="blank">
+              Github.com
+            </a>.
+          </p>
+          <p>© Nicolas Lebrun (Licence MIT) 2017</p>
+      </div><!-- .app-wrapper -->
 
     </div>
 
     <script src="//d3js.org/d3.v4.min.js"></script>
-    <script src="dist/javascript/main.min.js"></script>
+    <script src="dist/javascript/main.js"></script>
     <script id="__bs_script__">
      //<![CDATA[
      if( window.location.href  == 'http://p5.sketch/') {

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**!
  * Infrared spectrum reinterpretation
  *
@@ -13,42 +14,87 @@ body {
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   color: #fff;
-  background-color: #1b1414; }
+  background-color: #262626; }
 
 .app-wrapper {
   position: relative;
   display: block;
-  width: 1280px;
+  width: 100%;
+  min-width: 1440px;
   height: 100vh;
   margin: 0 auto; }
   .app-wrapper #canvas-wrapper,
   .app-wrapper aside {
     display: block;
-    min-height: 800px; }
+    min-height: 100vh; }
   .app-wrapper #canvas-wrapper {
-    width: 75%;
-    float: left; }
+    position: fixed;
+    width: 79%;
+    float: left;
+    background-color: #1f1f1f; }
   .app-wrapper aside {
-    width: 15%;
-    float: right;
-    padding: 20px 5px; }
+    position: relative;
+    width: 19%;
+    padding: 20px 1%;
+    float: right; }
 
-select#molecule-select {
-  padding: 0 2.5rem 0 1rem;
-  line-height: 2.5rem;
-  border: 0;
-  outline: 0;
-  text-align: center;
-  font-size: 18px;
-  border-radius: 0;
-  -webkit-appearance: none;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50px' fill='white' height='40px'><polyline points='46.139,15.518 25.166,36.49 4.193,15.519'/></svg>");
-  background-color: #333;
+a {
+  color: #fff; }
+
+dl.dropdown,
+dl.dropdown dd,
+dl.dropdown ul {
+  padding: 0;
+  margin: 0; }
+
+dl.dropdown a {
+  padding: .6rem 1rem;
+  font-size: 1.2em;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid #4d4d4d; }
+
+dl.dropdown > a {
+  display: block;
+  padding: .6rem 1.6rem .6rem 1rem;
+  background-color: #474747;
+  background-image: url(../images/caret-down.svg);
   background-repeat: no-repeat;
-  background-position: right 10px top 10px;
+  background-position: right 8px top 50%;
   -webkit-background-size: 16px 16px;
   background-size: 16px 16px;
-  color: #fff; }
+  -webkit-transition: background-color 0.05s ease-in-out;
+  transition: background-color 0.05s ease-in-out; }
+  dl.dropdown > a:hover {
+    background-color: #3d3d3d; }
+
+dl.dropdown.active > a {
+  background-image: url(../images/caret-up.svg); }
+
+dl.dropdown dd {
+   position: relative; }
+
+dl.dropdown dd ul {
+  display: block;
+  position: absolute;
+  left: 1em;
+  right: 1em;
+  list-style-type: none;
+  max-height: 0;
+  overflow-y: hidden;
+  -webkit-transition: all .35s ease-in-out;
+  transition: all .35s ease-in-out; }
+  dl.dropdown dd ul li a {
+    display: block;
+    border-top: none;
+    background-color: #424242;
+    -webkit-transition: all 0.05s ease-in-out;
+    transition: all 0.05s ease-in-out; }
+    dl.dropdown dd ul li a:hover {
+      background-color: #3d3d3d; }
+
+dl.dropdown.active ul {
+  max-height: 100vh; }
 
 .line-chart {
   font-weight: lighter;
@@ -68,8 +114,10 @@ select#molecule-select {
   color: #fff;
   font-size: 18px; }
 
-#data-comments p {
-  font-size: 11px;
-  line-height: 11px; }
-
-/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWFpbi5jc3MiLCJzb3VyY2VzIjpbIm1haW4uc2NzcyIsIl9zZXR0aW5ncy5zY3NzIiwiX2xheWVycy5zY3NzIiwiX21vbGVjdWxlLXNlbGVjdC5zY3NzIiwiX2QzLWNoYXJ0LnNjc3MiLCJfc291cmNlLWZpbGUtY29tbWVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7O0dBT0c7QUVQSCxBQUFBLElBQUksQ0FBQztFQUNILE1BQU0sRUFBRSxDQUFDO0VBQ1QsT0FBTyxFQUFFLENBQUM7RUFDVixVQUFVLEVBQUUsVUFBVTtFQUN0QixXQUFXLEVBQUUsNklBQTZJO0VBQzFKLEtBQUssRUFBRSxJQUFJO0VBQ1gsZ0JBQWdCLEVBQUUsT0FBTyxHQUUxQjs7QUFDRCxBQUFBLFlBQVksQ0FBQztFQUNYLFFBQVEsRUFBRSxRQUFRO0VBQ2xCLE9BQU8sRUFBRSxLQUFLO0VBQ2QsS0FBSyxFQUFFLE1BQU07RUFDYixNQUFNLEVBQUUsS0FBSztFQUNiLE1BQU0sRUFBRSxNQUFNLEdBZ0JmO0VBckJELEFBT0UsWUFQVSxDQU9WLGVBQWU7RUFQakIsQUFRRSxZQVJVLENBUVYsS0FBSyxDQUFDO0lBQ0osT0FBTyxFQUFFLEtBQUs7SUFDZCxVQUFVLEVBQUUsS0FBSyxHQUNsQjtFQVhILEFBWUUsWUFaVSxDQVlWLGVBQWUsQ0FBQTtJQUNiLEtBQUssRUFBRSxHQUFHO0lBQ1YsS0FBSyxFQUFFLElBQUksR0FDWjtFQWZILEFBZ0JFLFlBaEJVLENBZ0JWLEtBQUssQ0FBQztJQUNKLEtBQUssRUFBRSxHQUFHO0lBQ1YsS0FBSyxFQUFFLEtBQUs7SUFDWixPQUFPLEVBQUUsUUFBUSxHQUNsQjs7QUM3QkgsQUFBQSxNQUFNLEFBQUEsZ0JBQWdCLENBQUM7RUFDckIsT0FBTyxFQUFFLGVBQWU7RUFDeEIsV0FBVyxFQUFFLE1BQU07RUFDbkIsTUFBTSxFQUFFLENBQUM7RUFDVCxPQUFPLEVBQUMsQ0FBQztFQUNULFVBQVUsRUFBRSxNQUFNO0VBQ2xCLFNBQVMsRUFBRSxJQUFJO0VBQ2YsYUFBYSxFQUFFLENBQUM7RUFDaEIsa0JBQWtCLEVBQUUsSUFBSTtFQUN4QixVQUFVLEVBQUMsaUxBQWlMO0VBQzVMLGdCQUFnQixFQUFFLElBQUk7RUFDdEIsaUJBQWlCLEVBQUMsU0FBUztFQUMzQixtQkFBbUIsRUFBRSxtQkFBbUI7RUFDeEMsZUFBZSxFQUFFLFNBQVM7RUFDMUIsS0FBSyxFQUFFLElBQUksR0FDWjs7QUNmRCxBQUFBLFdBQVcsQ0FBQztFQUNWLFdBQVcsRUFBRSxPQUFPO0VBQ3BCLGVBQWUsRUFBRSxrQkFDbkIsR0FBRTs7QUFDRixBQUFZLFdBQUQsQ0FBQyxLQUFLLENBQUM7RUFDaEIsSUFBSSxFQUFFLElBQUk7RUFDVixNQUFNLEVBQUUsT0FBTztFQUNmLFlBQVksRUFBRSxHQUFHLEdBQ2xCOztBQUNELEFBQVksV0FBRCxDQUFDLFVBQVU7QUFDdEIsQUFBdUIsV0FBWixDQUFDLFVBQVUsQ0FBQyxPQUFPO0FBQzlCLEFBQTZCLFdBQWxCLENBQUMsVUFBVSxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUE7RUFDL0IsTUFBTSxFQUFFLE9BQU8sR0FFaEI7O0FBQ0QsQUFBWSxXQUFELENBQUMsT0FBTyxDQUFDO0VBQ2xCLEtBQUssRUFBRSxJQUFJO0VBQ1gsU0FBUyxFQUFFLElBQUksR0FDaEI7O0FDbEJELEFBQWUsY0FBRCxDQUFDLENBQUMsQ0FBQztFQUNmLFNBQVMsRUFBRSxJQUFJO0VBQ2YsV0FBVyxFQUFFLElBQUksR0FDbEIiLCJzb3VyY2VSb290IjoiLiJ9 */
+#data-comments {
+  margin-top: .5rem;
+  padding: .25rem .5rem;
+  background-color: #1f1f1f; }
+  #data-comments p {
+    font-size: .8em;
+    line-height: 1em; }

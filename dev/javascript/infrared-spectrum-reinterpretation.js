@@ -78,14 +78,20 @@ function filter_JDX_data(data) {
 	chart_this( molecule_ir_data );
 }
 
-molecule_select.onchange = function () {
-	var elem = (typeof this.selectedIndex === "undefined" ? window.event.srcElement : this);
-  var file = elem.value || elem.options[elem.selectedIndex].value;
+var molecules_entry = Array.prototype.slice.call(molecule_select.getElementsByClassName('link'));
 
-	document.getElementById('canvas-wrapper').innerHTML = "";
-	document.getElementById('data-comments').innerHTML = "";
+molecules_entry.forEach( function( molecule ) {
 
-	get_JDX_data(file,  filter_JDX_data);
-}
+	molecule.addEventListener('click', function(e){
+
+	  var file = this.getAttribute('data-file');
+		document.getElementById('canvas-wrapper').innerHTML = "";
+		document.getElementById('data-comments').innerHTML = "";
+
+		get_JDX_data(file,  filter_JDX_data);
+
+	}, false);
+});
+
 
 get_JDX_data('data/111-65-9-IR.jdx',  filter_JDX_data);

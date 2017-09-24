@@ -24,7 +24,7 @@ var COMPATIBILITY = [
 
 var directory = {
   dev : {
-    styles: 'dev/sass/main.scss',
+    styles: 'dev/sass/*.scss',
     scripts: 'dev/javascript/**.js',
     images: 'dev/images/*'
   },
@@ -39,16 +39,14 @@ var directory = {
 gulp.task('styles', function() {
   return gulp
     .src(directory.dev.styles)
-    .pipe(sourcemaps.init())
+    //.pipe(sourcemaps.init())
     .pipe(sass({errLogToConsole: true}))
-    .pipe(sourcemaps.write({includeContent: false, sourceRoot: '.'}))
-    .pipe(sourcemaps.init({loadMaps: true}))
+    //.pipe(sourcemaps.write({includeContent: false, sourceRoot: '.'}))
+    //.pipe(sourcemaps.init({loadMaps: true}))
     .pipe(autoprefixer({browsers: COMPATIBILITY, cascade: false}))
     .pipe(gulp.dest(directory.dist.styles))
     .pipe(rename({suffix: '.min'}))
-    .pipe(sourcemaps.init())
-    .pipe(cleanCSS({compatibility: 'ie9'}))
-    .pipe(sourcemaps.write())
+  //  .pipe(cleanCSS({compatibility: 'ie9'}))
     .pipe(gulp.dest(directory.dist.styles))
     .pipe(notify({ message: 'SASS processing and minifying complete' }));
 });

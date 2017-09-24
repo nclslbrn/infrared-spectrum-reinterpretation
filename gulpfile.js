@@ -81,11 +81,11 @@ gulp.task('sync', function() {
 
     //initialize browsersync
     browserSync.init(files, {
-    //browsersync with a php server
-    //proxy: "project.dev",
-    //port: 8080,
-    notify: true,
-    injectChanges: true
+      //browsersync with a php server
+      proxy: "p5.sketch/infrared-spectrum-reinterpretation/",
+      port: 8080,
+      notify: true,
+      injectChanges: true
     });
 });
 

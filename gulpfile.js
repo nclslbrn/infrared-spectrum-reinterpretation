@@ -26,7 +26,7 @@ var directory = {
   dev : {
     styles: 'dev/sass/main.scss',
     scripts: 'dev/javascript/**.js',
-    images: 'dev/images/*.{jpg,png,gif,svg}'
+    images: 'dev/images/*'
   },
   dist : {
     styles: 'dist/stylesheet/',

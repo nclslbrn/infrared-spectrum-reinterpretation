@@ -1,3 +1,7 @@
+/**!
+ * File: wavelength.js
+ */
+
 function chart_this( molecule_ir_data ) {
 
   var ir_data = Array.prototype.slice.call(molecule_ir_data);

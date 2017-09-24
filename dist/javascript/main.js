@@ -88,7 +88,11 @@ molecule_select.onchange = function () {
 	get_JDX_data(file,  filter_JDX_data);
 }
 
-get_JDX_data('_jcamp/111-65-9-IR.jdx',  filter_JDX_data);
+get_JDX_data('data/111-65-9-IR.jdx',  filter_JDX_data);
+
+/**!
+ * File: p5_interpreter.js
+ */
 
 var container_name = 'canvas-wrapper';
 var container = document.getElementById(container_name);
@@ -106,6 +110,10 @@ function draw(){
     console.log( data.value );
   });
 }
+
+/**!
+ * File: wavelength.js
+ */
 
 function chart_this( molecule_ir_data ) {
 

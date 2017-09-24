@@ -1,0 +1,19 @@
+.line-chart {
+  font-weight: lighter;
+  shape-rendering: geometricPrecision
+}
+.line-chart .line {
+  fill: none;
+  stroke: #8bc34a;
+  stroke-width: 1px;
+}
+.line-chart .axisWhite,
+.line-chart .axisWhite .domain,
+.line-chart .axisWhite .tick line{
+  stroke: #fefefe;
+
+}
+.line-chart .legend {
+  color: #fff;
+  font-size: 18px;
+}

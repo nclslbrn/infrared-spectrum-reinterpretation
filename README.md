@@ -1,6 +1,5 @@
 # ![flask](https://raw.githubusercontent.com/nclslbrn/infrared-spectrum-reinterpretation/master/dist/images/favicon-flask.ico "Favicon of the website") infrared-spectrum-reinterpretation
 
-![screenshot](https://raw.githubusercontent.com/nclslbrn/infrared-spectrum-reinterpretation/master/dist/images/screenshot.jpg "Screenshot of the website")
 
 This project is a tool for reinterpret, transcode infrared analysis of various molecules into different medium:
 - light sequences

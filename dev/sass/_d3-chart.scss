@@ -1,19 +1,28 @@
-.line-chart {
+
+.area-chart {
   font-weight: lighter;
-  shape-rendering: geometricPrecision
-}
-.line-chart .line {
-  fill: none;
-  stroke: #8bc34a;
-  stroke-width: 1px;
-}
-.line-chart .axisWhite,
-.line-chart .axisWhite .domain,
-.line-chart .axisWhite .tick line{
-  stroke: #fefefe;
+  shape-rendering: geometricPrecision;
 
 }
-.line-chart .legend {
-  color: #fff;
+
+.area-chart .area {
+  fill: url(#temperature-gradient);
+  stroke-width: 05px;
+}
+
+.area-chart .axisWhite,
+.area-chart .axisWhite .domain,
+.area-chart .axisWhite .tick line{
+  stroke: $text_color;
+
+}
+.grid line {
+  stroke: transparentize( $text_color, .2);
+}
+.grid path {
+  stroke-width: 0;
+}
+.area-chart .legend {
+  color: $text_color;
   font-size: 18px;
 }

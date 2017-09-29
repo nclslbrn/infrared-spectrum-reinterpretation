@@ -7,4 +7,9 @@
     font-size: .8em;
     line-height: 1em;
   }
+  p:first-child {
+    font-size: 1.2em;
+    line-height: 1.4em;
+    color: $primary_color;
+  }
 }

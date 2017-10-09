@@ -10,6 +10,11 @@ Infrared spectrums come from NIST (National Institute of Standards and Technolog
 due to a server limitation we have to download files manually from [nist.gov](http://webbook.nist.gov/chemistry/name-ser/)
 and put into a folder data/, and put each link into the `<ul>` index.html file like below.
 
+Spectrum vizualisation is made with [D3.js v4](https://github.com/d3/d3).
+Audio synthesis with [Flocking](https://github.com/colinbdclark/Flocking).
+Others features 'll come asap...
+
+
 ```html
 <dl id="molecule-select" class="dropdown">
   <a href="#" class="dropdown-button" data-activate="dropdown-molecule">Select a molecule</a>

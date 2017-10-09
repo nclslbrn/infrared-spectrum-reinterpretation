@@ -6,22 +6,22 @@ var dropdowns =  Array.prototype.slice.call(document.getElementsByClassName('dro
 
 dropdowns.forEach(function( dropdown ) {
 
-  var links = Array.prototype.slice.call(document.getElementsByClassName('link'));
+    var links = Array.prototype.slice.call(document.getElementsByClassName('link'));
 
-  dropdown.addEventListener('click', function(e){
+    dropdown.addEventListener('click', function(e){
 
-    e.preventDefault();
-    this.parentElement.classList.toggle('active');
+        e.preventDefault();
+        this.parentElement.classList.toggle('active');
 
-  }, false);
+    }, false);
 
-  links.forEach(function( link ) {
+    links.forEach(function( link ) {
 
-    link.addEventListener('click', function(e){
+        link.addEventListener('click', function(e){
 
-      e.preventDefault();
-      this.parentElement.parentElement.parentElement.parentElement.classList.toggle('active');
+            e.preventDefault();
+            this.parentElement.parentElement.parentElement.parentElement.classList.toggle('active');
 
+        });
     });
-  });
 });

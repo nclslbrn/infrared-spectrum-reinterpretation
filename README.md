@@ -11,7 +11,7 @@ due to a server limitation we have to download files manually from [nist.gov](ht
 and put into a folder data/, and put each link into the `<ul>` index.html file like below.
 
 Spectrum vizualisation is made with [D3.js v4](https://github.com/d3/d3).
-Audio synthesis with [Flocking](https://github.com/colinbdclark/Flocking).
+Audio synthesis with [Tone.js](https://github.com/Tonejs/Tone.js).
 Others features 'll come asap...
 
 

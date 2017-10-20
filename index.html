@@ -17,11 +17,81 @@
   <body>
     <div class="app-wrapper">
 
-      <main id="canvas-wrapper">
+      <main>
+        <div class="app-module">
+          <div id="canvas-wrapper"></div>
+          <form method="POST" id="data-analysis-parameter">
+            <fieldset>
+              <label for="minFrequency">Threshold (used to detect hits on transmitance)</label>
+              <input type="range" min="0" max="100" value="50" class="slider" id="transmitanceThreshold">
+            </fieldset>
+          </form>
+        </div>
+
+        <div id="sound-module" class="app-module">
+            <div class="module--input">
+              <h3>Sound reinterpretation</h3>
+              <form method="POST" id="sound-parameter">
+              <fieldset>
+                <label for="minFrequency">Minimum frequency</label>
+                <input type="range" min="1" max="100" value="50" class="slider" id="minFrequency">
+              </fieldset>
+
+              <fieldset>
+                <label for="minFrequency">Maximum frequency</label>
+                <input type="range" min="1" max="100" value="50" class="slider" id="maxFrequency">
+              </fieldset>
+              <input type="submit" name="play" value="Play">
+            </form>
+          </div>
+          <div class="module--output">
+          </div>
+        </div>
+
+        <div id="light-module" class="app-module">
+          <div class="module--input">
+            <h3>Light reinterpretation</h3>
+            <form method="POST" id="light-parameter">
+              <fieldset>
+                <label for="minFrequency">Minimum luminescence</label>
+                <input type="range" min="1" max="100" value="50" class="slider" id="minFrequency">
+              </fieldset>
+
+              <fieldset>
+                <label for="minFrequency">Maximum luminescence</label>
+                <input type="range" min="1" max="100" value="50" class="slider" id="maxFrequency">
+              </fieldset>
+              <input type="submit" name="play" value="Play">
+            </form>
+          </div>
+
+          <div class="module--output">
+          </div>
+        </div>
+
+        <div id="motion-module" class="app-module">
+          <div class="module--input">
+            <h3>Motion reinterpretation</h3>
+            <form method="POST" id="motion-parameter">
+              <fieldset>
+                <label for="minFrequency">Minimum strength</label>
+                <input type="range" min="1" max="100" value="50" class="slider" id="minFrequency">
+              </fieldset>
+
+              <fieldset>
+                <label for="minFrequency">Maximum strength</label>
+                <input type="range" min="1" max="100" value="50" class="slider" id="maxFrequency">
+              </fieldset>
+              <input type="submit" name="play" value="Play">
+            </form>
+          </div>
+
+          <div class="module--output">
+          </div>
+        </div>
 
 
       </main>
-
       <aside>
         <h1>Infrared Spectrum Reinterpretation</h1>
         <dl id="molecule-select" class="dropdown">
@@ -40,7 +110,14 @@
             </ul>
           </dd>
         </dl>
-        <div id="data-comments"></div>
+        <div id="data-comments">
+
+        </div>
+        <button class="button modal-button" data-toggle="comment-source-file-modal">
+          Read all comments of the source file
+        </button>
+      </aside>
+      <footer>
         <div class="right">
           <p>
             Infrared Spectrum Reinterprettion is an open source project under MIT License,
@@ -50,17 +127,27 @@
             </a>.
           </p>
           <p>© Nicolas Lebrun (Licence MIT) 2017</p>
+      </footer>
       </div><!-- .app-wrapper -->
+
+      <div id="comment-source-file-modal" class="modal">
+        <h1>
+          Comments of the source file
+          <button class="button modal-button" data-toggle="comment-source-file-modal">
+            &times;
+          </button>
+        </h1>
+      </div>
 
     </div>
 
     <!-- GRAPH: D3.JS -->
     <script src="lib/d3.v4.min.js"></script>
-    <!-- AUDIO: Flocking -->
-    <script src="lib/flocking-all.min.js"></script>
+    <!-- AUDIO: TONE.JS -->
+    <script src="lib/Tone.min.js"></script>
 
     <!-- Infrared spectrum function (files from dist/javascript concatenated into main.js) -->
-    <script src="dist/javascript/main.min.js"></script>
+    <script src="dist/javascript/main.js"></script>
     <!-- browser-sync if we are on local dev machine -->
     <script id="__bs_script__">
      //<![CDATA[

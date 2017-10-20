@@ -11,36 +11,48 @@ dl.dropdown {
   a {
     padding: .6rem 1rem;
     font-size: 1.2em;
+    text-align: center;
     color: $text_color;
     text-decoration: none;
-    border: 1px solid transparentize($primary_color, .8);
+    border: 1px solid transparentize($primary_color, .5);
 
   }
 
 
   > a {
     display: block;
+    position: relative;
     padding: .6rem 1.6rem .6rem 1rem;
-    background-color: lighten($background_color, 8%);
-    background-image: url(../images/caret-down.svg);
-    background-repeat: no-repeat;
-    background-position: right 8px top 50%;
-    background-size: 16px 16px;
+    background-color: $primary_color;
     transition: background-color $animation;
 
+    &::after {
+      position: absolute;
+      right: 1em;
+      margin: .5em;
+      content: '';
+      border-width: .5em;
+      border-style: solid;
+      border-color: transparent;
+      border-top-color: $text_color;
+      transform-origin: .5em .25em;
+      transition: all $animation;
+    }
     &:hover {
-      background-color: lighten($background_color, 4%);
+      background-color: lighten($background_color, 5%);
     }
   }
   &.active > a {
-    background-image: url(../images/caret-up.svg);
+    &::after {
+      transform: rotate(180deg);
+    }
   }
 
   dd {
     position: relative;
     width: 100%;
   }
-  
+
   dd ul {
     display: block;
     position: absolute;
@@ -54,12 +66,12 @@ dl.dropdown {
     li a {
       display: block;
       border-top: none;
-      background-color: lighten($background_color, 6%);
+      background-color: lighten($primary_color, 6%);
       transition: all $animation;
 
       &:hover {
-        color: $primary_color;
-        background-color: lighten($background_color, 4%);
+        color: $text_color;
+        background-color: lighten($background_color, 3%);
       }
     }
   }

@@ -2,63 +2,79 @@
  * File audio-synthesis.js
  */
 
+
 function make_sound( molecule_ir_data ) {
+    var synth = new Tone.PolySynth(3, Tone.Synth, {
+        'oscillator' : {
+          'type' : 'fatsawtooth',
+          'count' : 3,
+          'spread' : 30
+        },
+        'envelope': {
+          'attack': 0.01,
+          'decay': 0.1,
+          'sustain': 0.5,
+          'release': 0.4,
+          'attackCurve' : 'exponential'
+        },
+      }).toMaster();
 
-    var band = flock.band({
-        components: {
-            sinSynth: {
-                type: "flock.synth",
-                options: {
-                    synthDef: {
-                        id: "carrier",
-                        ugen: "flock.ugen.sinOsc",
-                        freq: 220,
-                        mul: {
-                            ugen: "flock.ugen.line",
-                            start: 0,
-                            end: 0.25,
-                            duration: 1.0
-                        }
-                    }
-                }
-            },
+    var ir_data = Array.prototype.slice.call(molecule_ir_data);
+    var transmitanceThreshold = document.getElementById('transmitanceThreshold').value / 1000;
+    var notes = [];
 
-            scheduler: {
-                type: "flock.scheduler.async",
-                options: {
-                    components: {
-                        synthContext: "{sinSynth}"
-                    },
+    //console.log(transmitanceThreshold);
+    for ( var n = 1; n < ir_data.length; n++ ) {
 
-                    score: [
-                        {
-                            interval: "repeat",
-                            time: 1.0,
-                            change: {
-                                values: {
-                                    "carrier.freq": {
-                                        synthDef: {
-                                            ugen: "flock.ugen.sequence",
-                                            values: [330, 440, 550, 660, 880, 990, 1100, 1210]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
+      if(
+        ir_data[n].value  > ( ir_data[n-1].value + transmitanceThreshold )
+        ||
+        ir_data[n].value  < ( ir_data[n-1].value - transmitanceThreshold )
+      ) {
+
+        synth.triggerAttackRelease(
+          ir_data[n].frequency,
+          Math.round(ir_data[n].value * 10) + 'n',
+          1
+        );
+
+        var note = {
+          'note': new Tone.Frequency(ir_data[n].frequency, 'midi').toNote(),
+          'time':  Math.round(ir_data[n].value * 10) + 'n'
+        };
+        notes.push(note);
+        console.log( ir_data[n].value + '<' + ir_data[n-1].value );
+      }
+    }
+    console.log(transmitanceThreshold);
+    console.log(notes.length);
+
+    /*
+    ir_data.forEach( function(d) {
+
+        if(d.value > .7) {
+
+            synth.triggerAttackRelease(
+              d.frequency,
+              Math.round(d.value * 10) + 'n',
+              1
+            );
+
+            var note = {
+              'note': new Tone.Frequency(d.frequency, 'midi').toNote(),
+              'time':  Math.round(d.value * 10) + 'n'
+            };
+            notes.push(note);
         }
-    });
 
-    // Fade out after 8 seconds.
-    band.scheduler.once(8, function () {
-        band.sinSynth.set({
-            "carrier.mul.start": 0.25,
-            "carrier.mul.end": 0.0,
-            "carrier.mul.duration": 1.0
-        });
     });
+    */
+/*
+    var part = new Tone.Part(function(time, note){
+			synth.triggerAttackRelease(notes.note, notes.time, time, 1);
+		}, notes).start(0);
+*/
+//    Tone.Transport.start();
 }
 
 /**!
@@ -124,6 +140,7 @@ get_JDX_data = function loadJDX(filePath, success, error) {
  * @param line Line : Frequency + " " +  Transmitance + " " +Absorbance
  */
 function filter_JDX_data(data) {
+
 		molecule_ir_data = new Array();
 	  //split raw text by line
 	  var lines = data.split( "\n" );
@@ -144,25 +161,39 @@ function filter_JDX_data(data) {
 
 								// Store data in global var
 								molecule_ir_data.push({
-									frequency: data_column[0],
-									value: data_column[1]
+									frequency: parseFloat(data_column[0]),
+									value: parseFloat(data_column[1])
 								});
 
 				    } else {
 
 					      // Show data origin and comments
 					      var container = document.getElementById('data-comments');
-					      var content = document.createElement('p');
+								var modal = document.getElementById('comment-source-file-modal');
+								var extract = document.createElement('p');
+								var content = document.createElement('p');
 
 								// But delete the two first # before adding to the html markup
 								if( firstChar == "#" ) {
 
+										if( n < 9 ) {
+												extract.innerHTML = lines[n].substring(2);
+										}
+
 										content.innerHTML = lines[n].substring(2);
+
+
 								} else {
 
+										if( n < 9 ) {
+												extract.innerHTML = lines[n].substring(2);
+										}
+
 										content.innerHTML = lines[n];
+
 								}
-					      container.appendChild( content );
+					      container.append( extract );
+								modal.appendChild( content );
 				    }
 				}
 	  }
@@ -188,7 +219,27 @@ molecules_entry.forEach( function( molecule ) {
 });
 
 
-get_JDX_data('data/111-65-9-IR.jdx',  filter_JDX_data);
+get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
+
+/**!
+ * File: modal.js
+ */
+
+var modalButtons =  Array.prototype.slice.call(document.getElementsByClassName('modal-button'));
+
+modalButtons.forEach(function( button ) {
+
+  button.addEventListener('click', function(e){
+
+      e.preventDefault();
+      var modalId = this.getAttribute('data-toggle');
+      console.log( modalId );
+      var modal = document.getElementById(modalId)
+      modal.classList.toggle('active');
+
+  }, false);
+
+});
 
 /**!
  * File: p5_interpreter.js
@@ -237,7 +288,7 @@ function chart_this( molecule_ir_data ) {
       .x(function(d) { return x(d.frequency); })
       .y1(function(d) { return y(d.value); });
 
-  var svg = d3.select("body #canvas-wrapper").append("svg").attr('class', 'area-chart')
+  var svg = d3.select("body #canvas-wrapper").insert("svg").attr('class', 'area-chart')
       .datum(ir_data)
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)

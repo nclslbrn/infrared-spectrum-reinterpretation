@@ -2,10 +2,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  color: $text_color;
   background-color: darken($background_color, 5%);
-
 }
 .app-wrapper {
   position: relative;
@@ -15,27 +12,37 @@ body {
   height: 100vh;
   margin: 0 auto;
 
-  #canvas-wrapper,
+  main,
   aside {
-    display: block;
+    display: inline-block;
     min-height: 100vh;
   }
-  #canvas-wrapper{
-    position: fixed;
-    width: 79%;
+  main {
+    position: relative;
+    width: 77%;
+    padding: 0 1%;
     float: left;
-    background-color: darken($background_color, 8%);
-
+  }
+  .app-module #canvas-wrapper {
+    display: block;
+    min-height: 42vh;
+    width: 100%;
   }
   aside {
     position: relative;
     width: 19%;
-    padding: 20px 1%;
+    padding: 1rem 1%;
     float: right;
   }
-}
+  footer {
+    display: block;
+    clear: both;
+    float: none;
+    padding: 2rem 1rem 1rem;
 
-
-a {
-  color: $text_color;
+    .right {
+      padding: 1rem 1rem 0;
+      border-top: 1px solid transparentize($text_color, .95);
+    }
+  }
 }

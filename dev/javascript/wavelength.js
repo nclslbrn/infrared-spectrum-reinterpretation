@@ -23,7 +23,7 @@ function chart_this( molecule_ir_data ) {
       .x(function(d) { return x(d.frequency); })
       .y1(function(d) { return y(d.value); });
 
-  var svg = d3.select("body #canvas-wrapper").append("svg").attr('class', 'area-chart')
+  var svg = d3.select("body #canvas-wrapper").insert("svg").attr('class', 'area-chart')
       .datum(ir_data)
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)

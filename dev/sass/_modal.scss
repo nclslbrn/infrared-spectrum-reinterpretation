@@ -1,0 +1,31 @@
+.modal {
+  display: none;
+  position: absolute;
+  top: 4rem;
+  left: 4rem;
+  bottom: 4rem;
+  right: 4rem;
+  padding: 4rem;
+  overflow: auto;
+  background: transparentize($background_color, .04);
+  transform: translate(0, 100%);
+  transition: transform $animation;
+  h1 {
+    margin: 0 0 2rem 0;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid transparentize($text_color, .9);
+  }
+  h1 button.button {
+    display: inline-block;
+    float: right;
+    width: 1em;
+    background: none;
+    font-size: inherit;
+    padding: 0;
+  }
+}
+
+.modal.active {
+  display: block;
+  transform: translate(0);
+}

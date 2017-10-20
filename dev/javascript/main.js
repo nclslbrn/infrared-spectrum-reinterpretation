@@ -33,6 +33,7 @@ get_JDX_data = function loadJDX(filePath, success, error) {
  * @param line Line : Frequency + " " +  Transmitance + " " +Absorbance
  */
 function filter_JDX_data(data) {
+
 		molecule_ir_data = new Array();
 	  //split raw text by line
 	  var lines = data.split( "\n" );
@@ -53,25 +54,39 @@ function filter_JDX_data(data) {
 
 								// Store data in global var
 								molecule_ir_data.push({
-									frequency: data_column[0],
-									value: data_column[1]
+									frequency: parseFloat(data_column[0]),
+									value: parseFloat(data_column[1])
 								});
 
 				    } else {
 
 					      // Show data origin and comments
 					      var container = document.getElementById('data-comments');
-					      var content = document.createElement('p');
+								var modal = document.getElementById('comment-source-file-modal');
+								var extract = document.createElement('p');
+								var content = document.createElement('p');
 
 								// But delete the two first # before adding to the html markup
 								if( firstChar == "#" ) {
 
+										if( n < 9 ) {
+												extract.innerHTML = lines[n].substring(2);
+										}
+
 										content.innerHTML = lines[n].substring(2);
+
+
 								} else {
 
+										if( n < 9 ) {
+												extract.innerHTML = lines[n].substring(2);
+										}
+
 										content.innerHTML = lines[n];
+
 								}
-					      container.appendChild( content );
+					      container.append( extract );
+								modal.appendChild( content );
 				    }
 				}
 	  }
@@ -97,4 +112,4 @@ molecules_entry.forEach( function( molecule ) {
 });
 
 
-get_JDX_data('data/111-65-9-IR.jdx',  filter_JDX_data);
+get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);

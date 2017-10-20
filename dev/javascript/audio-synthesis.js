@@ -2,61 +2,77 @@
  * File audio-synthesis.js
  */
 
+
 function make_sound( molecule_ir_data ) {
+    var synth = new Tone.PolySynth(3, Tone.Synth, {
+        'oscillator' : {
+          'type' : 'fatsawtooth',
+          'count' : 3,
+          'spread' : 30
+        },
+        'envelope': {
+          'attack': 0.01,
+          'decay': 0.1,
+          'sustain': 0.5,
+          'release': 0.4,
+          'attackCurve' : 'exponential'
+        },
+      }).toMaster();
 
-    var band = flock.band({
-        components: {
-            sinSynth: {
-                type: "flock.synth",
-                options: {
-                    synthDef: {
-                        id: "carrier",
-                        ugen: "flock.ugen.sinOsc",
-                        freq: 220,
-                        mul: {
-                            ugen: "flock.ugen.line",
-                            start: 0,
-                            end: 0.25,
-                            duration: 1.0
-                        }
-                    }
-                }
-            },
+    var ir_data = Array.prototype.slice.call(molecule_ir_data);
+    var transmitanceThreshold = document.getElementById('transmitanceThreshold').value / 1000;
+    var notes = [];
 
-            scheduler: {
-                type: "flock.scheduler.async",
-                options: {
-                    components: {
-                        synthContext: "{sinSynth}"
-                    },
+    //console.log(transmitanceThreshold);
+    for ( var n = 1; n < ir_data.length; n++ ) {
 
-                    score: [
-                        {
-                            interval: "repeat",
-                            time: 1.0,
-                            change: {
-                                values: {
-                                    "carrier.freq": {
-                                        synthDef: {
-                                            ugen: "flock.ugen.sequence",
-                                            values: [330, 440, 550, 660, 880, 990, 1100, 1210]
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
+      if(
+        ir_data[n].value  > ( ir_data[n-1].value + transmitanceThreshold )
+        ||
+        ir_data[n].value  < ( ir_data[n-1].value - transmitanceThreshold )
+      ) {
+
+        synth.triggerAttackRelease(
+          ir_data[n].frequency,
+          Math.round(ir_data[n].value * 10) + 'n',
+          1
+        );
+
+        var note = {
+          'note': new Tone.Frequency(ir_data[n].frequency, 'midi').toNote(),
+          'time':  Math.round(ir_data[n].value * 10) + 'n'
+        };
+        notes.push(note);
+        console.log( ir_data[n].value + '<' + ir_data[n-1].value );
+      }
+    }
+    console.log(transmitanceThreshold);
+    console.log(notes.length);
+
+    /*
+    ir_data.forEach( function(d) {
+
+        if(d.value > .7) {
+
+            synth.triggerAttackRelease(
+              d.frequency,
+              Math.round(d.value * 10) + 'n',
+              1
+            );
+
+            var note = {
+              'note': new Tone.Frequency(d.frequency, 'midi').toNote(),
+              'time':  Math.round(d.value * 10) + 'n'
+            };
+            notes.push(note);
         }
-    });
 
-    // Fade out after 8 seconds.
-    band.scheduler.once(8, function () {
-        band.sinSynth.set({
-            "carrier.mul.start": 0.25,
-            "carrier.mul.end": 0.0,
-            "carrier.mul.duration": 1.0
-        });
     });
+    */
+/*
+    var part = new Tone.Part(function(time, note){
+			synth.triggerAttackRelease(notes.note, notes.time, time, 1);
+		}, notes).start(0);
+*/
+//    Tone.Transport.start();
 }

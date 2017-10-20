@@ -1,0 +1,23 @@
+.app-module {
+  position: relative;
+  display: table;
+  margin: 1rem;
+  width: 100%;
+  border: 1px solid transparentize($text_color, .95);
+
+  .module--input,
+  .module--output {
+    display: table-cell;
+  }
+
+  .module--input {
+    width: 25%;
+    background-color: darken($background_color, 2%);
+    border-right: 1px solid transparentize($text_color, .95);
+  }
+  &#canvas-wrapper,
+  .module--output {
+    width: 75%;
+    background-color: darken($background_color, 4%);
+  }
+}

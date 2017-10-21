@@ -6,6 +6,8 @@ function chart_this( molecule_ir_data ) {
 
   var ir_data = Array.prototype.slice.call(molecule_ir_data);
   var container = document.getElementById('canvas-wrapper');
+  var button = document.getElementsByClassName('button')[0];
+  var waveColor = document.defaultView.getComputedStyle( button ,null).getPropertyValue('background-color');
 
   ir_data.forEach(function(d) {
       d.frequency = d.frequency;
@@ -51,9 +53,9 @@ function chart_this( molecule_ir_data ) {
       .attr("x2", width).attr("y2", y(1))
   .selectAll("stop")
       .data([
-        {offset: "0%", color: "steelblue"},
-        {offset: "50%", color: "gray"},
-        {offset: "100%", color: "red"}
+        {offset: "0%", color: waveColor },
+        {offset: "50%", color: waveColor },
+        {offset: "100%", color: waveColor }
       ])
   .enter().append("stop")
       .attr("offset", function(d) { return d.offset; })

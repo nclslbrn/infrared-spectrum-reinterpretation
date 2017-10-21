@@ -90,10 +90,16 @@ function filter_JDX_data(data) {
 				    }
 				}
 	  }
-		// Once the whole document is parsed fire our
-		// function to make a chart
+		// Once the whole document is parsed
+
+		//get transmitance hit (depends to threshold slider value)
+		transmitanceHit = getTransmitanceHit( molecule_ir_data )
+
+		// fire our function to make a chart
 		chart_this( molecule_ir_data );
-		make_sound( molecule_ir_data );
+
+		// fire our function to make sound
+		make_sound( transmitanceHit );
 }
 
 var molecules_entry = Array.prototype.slice.call(molecule_select.getElementsByClassName('link'));
@@ -113,3 +119,30 @@ molecules_entry.forEach( function( molecule ) {
 
 
 get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
+
+function getTransmitanceHit( molecule_ir_data ) {
+
+		var transmitanceThreshold = document.getElementById('transmitanceThreshold').value / 1000;
+		var ir_data = Array.prototype.slice.call(molecule_ir_data);
+		var transmitanceHit = [];
+
+		for ( var n = 1; n < ir_data.length; n++ ) {
+
+	      if(
+	        ir_data[n].value  > ( ir_data[n-1].value + transmitanceThreshold )
+	        ||
+	        ir_data[n].value  < ( ir_data[n-1].value - transmitanceThreshold )
+	      ) {
+
+					var hit = {
+						transmitance: ir_data[n].value,
+						frequency: ir_data[n].frequency
+					};
+
+					transmitanceHit.push( hit );
+
+				}
+		}
+
+		return transmitanceHit;
+}

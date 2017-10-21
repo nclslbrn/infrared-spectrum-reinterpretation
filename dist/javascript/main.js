@@ -3,7 +3,8 @@
  */
 
 
-function make_sound( molecule_ir_data ) {
+function make_sound( transmitanceHit ) {
+
     var synth = new Tone.PolySynth(3, Tone.Synth, {
         'oscillator' : {
           'type' : 'fatsawtooth',
@@ -19,62 +20,36 @@ function make_sound( molecule_ir_data ) {
         },
       }).toMaster();
 
-    var ir_data = Array.prototype.slice.call(molecule_ir_data);
-    var transmitanceThreshold = document.getElementById('transmitanceThreshold').value / 1000;
     var notes = [];
+    var duration = 0;
+    var now = Tone.now();
 
-    //console.log(transmitanceThreshold);
-    for ( var n = 1; n < ir_data.length; n++ ) {
+    for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
-      if(
-        ir_data[n].value  > ( ir_data[n-1].value + transmitanceThreshold )
-        ||
-        ir_data[n].value  < ( ir_data[n-1].value - transmitanceThreshold )
-      ) {
-
-        synth.triggerAttackRelease(
-          ir_data[n].frequency,
-          Math.round(ir_data[n].value * 10) + 'n',
-          1
-        );
-
+        var time =  transmitanceHit[n].transmitance;
         var note = {
-          'note': new Tone.Frequency(ir_data[n].frequency, 'midi').toNote(),
-          'time':  Math.round(ir_data[n].value * 10) + 'n'
+          'note': new Tone.Frequency(transmitanceHit[n].frequency, 'midi').toNote(),
+          'time': time
         };
         notes.push(note);
-        console.log( ir_data[n].value + '<' + ir_data[n-1].value );
-      }
+        duration = duration + time;
+
+        //console.log( ir_data[n].value + '<' + ir_data[n-1].value );
+
     }
-    console.log(transmitanceThreshold);
-    console.log(notes.length);
+    //console.log(transmitanceThreshold);
+    console.log(notes);
 
-    /*
-    ir_data.forEach( function(d) {
 
-        if(d.value > .7) {
-
-            synth.triggerAttackRelease(
-              d.frequency,
-              Math.round(d.value * 10) + 'n',
-              1
-            );
-
-            var note = {
-              'note': new Tone.Frequency(d.frequency, 'midi').toNote(),
-              'time':  Math.round(d.value * 10) + 'n'
-            };
-            notes.push(note);
-        }
-
-    });
-    */
-/*
     var part = new Tone.Part(function(time, note){
-			synth.triggerAttackRelease(notes.note, notes.time, time, 1);
-		}, notes).start(0);
-*/
-//    Tone.Transport.start();
+			synth.triggerAttackRelease(note.note, now + note.time, time, 1);
+		}, notes);
+
+    part.start(now);
+    part.stop(now + duration);
+
+    Tone.Transport.start();
+
 }
 
 /**!
@@ -197,10 +172,16 @@ function filter_JDX_data(data) {
 				    }
 				}
 	  }
-		// Once the whole document is parsed fire our
-		// function to make a chart
+		// Once the whole document is parsed
+
+		//get transmitance hit (depends to threshold slider value)
+		transmitanceHit = getTransmitanceHit( molecule_ir_data )
+
+		// fire our function to make a chart
 		chart_this( molecule_ir_data );
-		make_sound( molecule_ir_data );
+
+		// fire our function to make sound
+		make_sound( transmitanceHit );
 }
 
 var molecules_entry = Array.prototype.slice.call(molecule_select.getElementsByClassName('link'));
@@ -220,6 +201,33 @@ molecules_entry.forEach( function( molecule ) {
 
 
 get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
+
+function getTransmitanceHit( molecule_ir_data ) {
+
+		var transmitanceThreshold = document.getElementById('transmitanceThreshold').value / 1000;
+		var ir_data = Array.prototype.slice.call(molecule_ir_data);
+		var transmitanceHit = [];
+
+		for ( var n = 1; n < ir_data.length; n++ ) {
+
+	      if(
+	        ir_data[n].value  > ( ir_data[n-1].value + transmitanceThreshold )
+	        ||
+	        ir_data[n].value  < ( ir_data[n-1].value - transmitanceThreshold )
+	      ) {
+
+					var hit = {
+						transmitance: ir_data[n].value,
+						frequency: ir_data[n].frequency
+					};
+
+					transmitanceHit.push( hit );
+
+				}
+		}
+
+		return transmitanceHit;
+}
 
 /**!
  * File: modal.js
@@ -271,6 +279,8 @@ function chart_this( molecule_ir_data ) {
 
   var ir_data = Array.prototype.slice.call(molecule_ir_data);
   var container = document.getElementById('canvas-wrapper');
+  var button = document.getElementsByClassName('button')[0];
+  var waveColor = document.defaultView.getComputedStyle( button ,null).getPropertyValue('background-color');
 
   ir_data.forEach(function(d) {
       d.frequency = d.frequency;
@@ -316,9 +326,9 @@ function chart_this( molecule_ir_data ) {
       .attr("x2", width).attr("y2", y(1))
   .selectAll("stop")
       .data([
-        {offset: "0%", color: "steelblue"},
-        {offset: "50%", color: "gray"},
-        {offset: "100%", color: "red"}
+        {offset: "0%", color: waveColor },
+        {offset: "50%", color: waveColor },
+        {offset: "100%", color: waveColor }
       ])
   .enter().append("stop")
       .attr("offset", function(d) { return d.offset; })

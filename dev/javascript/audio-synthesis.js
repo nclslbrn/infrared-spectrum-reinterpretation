@@ -3,7 +3,8 @@
  */
 
 
-function make_sound( molecule_ir_data ) {
+function make_sound( transmitanceHit ) {
+
     var synth = new Tone.PolySynth(3, Tone.Synth, {
         'oscillator' : {
           'type' : 'fatsawtooth',
@@ -19,60 +20,34 @@ function make_sound( molecule_ir_data ) {
         },
       }).toMaster();
 
-    var ir_data = Array.prototype.slice.call(molecule_ir_data);
-    var transmitanceThreshold = document.getElementById('transmitanceThreshold').value / 1000;
     var notes = [];
+    var duration = 0;
+    var now = Tone.now();
 
-    //console.log(transmitanceThreshold);
-    for ( var n = 1; n < ir_data.length; n++ ) {
+    for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
-      if(
-        ir_data[n].value  > ( ir_data[n-1].value + transmitanceThreshold )
-        ||
-        ir_data[n].value  < ( ir_data[n-1].value - transmitanceThreshold )
-      ) {
-
-        synth.triggerAttackRelease(
-          ir_data[n].frequency,
-          Math.round(ir_data[n].value * 10) + 'n',
-          1
-        );
-
+        var time =  transmitanceHit[n].transmitance;
         var note = {
-          'note': new Tone.Frequency(ir_data[n].frequency, 'midi').toNote(),
-          'time':  Math.round(ir_data[n].value * 10) + 'n'
+          'note': new Tone.Frequency(transmitanceHit[n].frequency, 'midi').toNote(),
+          'time': time
         };
         notes.push(note);
-        console.log( ir_data[n].value + '<' + ir_data[n-1].value );
-      }
+        duration = duration + time;
+
+        //console.log( ir_data[n].value + '<' + ir_data[n-1].value );
+
     }
-    console.log(transmitanceThreshold);
-    console.log(notes.length);
+    //console.log(transmitanceThreshold);
+    console.log(notes);
 
-    /*
-    ir_data.forEach( function(d) {
 
-        if(d.value > .7) {
-
-            synth.triggerAttackRelease(
-              d.frequency,
-              Math.round(d.value * 10) + 'n',
-              1
-            );
-
-            var note = {
-              'note': new Tone.Frequency(d.frequency, 'midi').toNote(),
-              'time':  Math.round(d.value * 10) + 'n'
-            };
-            notes.push(note);
-        }
-
-    });
-    */
-/*
     var part = new Tone.Part(function(time, note){
-			synth.triggerAttackRelease(notes.note, notes.time, time, 1);
-		}, notes).start(0);
-*/
-//    Tone.Transport.start();
+			synth.triggerAttackRelease(note.note, now + note.time, time, 1);
+		}, notes);
+
+    part.start(now);
+    part.stop(now + duration);
+
+    Tone.Transport.start();
+
 }

@@ -1,18 +1,44 @@
-/* Dark pink
+//  Color Scheme
+
+/**
+ * Dark pink
+ */
+ /*
 $background_color: #310052;
 $text_color: #FFDEF6;
 $primary_color: #850D66;
 */
-/* electric blue
-$background_color: #273538;
-$text_color: #f1f1f1;
-$primary_color: #004FFF;
+
+/**
+ * light gray
+ */
+/*
+$background_color: #fff;
+$text_color: #333;
+$primary_color: #aaa;
 */
 
-/* darkish */
-$background_color: #1A1A1A;
-$text_color: #ccc;
-$primary_color: #1A1A1A;
+/**
+ * darkish
+ */
+/*
+$background_color: #3D3D3D;
+$text_color: #EBEBEB;
+$primary_color: #697065;
+*/
+
+/**
+ * dark green
+ */
+
+$background_color: #033649;
+$text_color: #E8DDCB;
+$primary_color: #036564;
+
+
+
+$secondary_color: lighten(adjust-hue($primary_color, -10%), 20%);
+
 
 $heading_font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 $body_font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";

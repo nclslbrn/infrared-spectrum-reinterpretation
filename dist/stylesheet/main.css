@@ -6,17 +6,33 @@
  * @license MIT
  * @version 1.0.0
  */
-/* Dark pink
+/**
+ * Dark pink
+ */
+/*
 $background_color: #310052;
 $text_color: #FFDEF6;
 $primary_color: #850D66;
 */
-/* electric blue
-$background_color: #273538;
-$text_color: #f1f1f1;
-$primary_color: #004FFF;
+/**
+ * light gray
+ */
+/*
+$background_color: #fff;
+$text_color: #333;
+$primary_color: #aaa;
 */
-/* darkish */
+/**
+ * darkish
+ */
+/*
+$background_color: #3D3D3D;
+$text_color: #EBEBEB;
+$primary_color: #697065;
+*/
+/**
+ * dark green
+ */
 html {
   font-size: 1em; }
 
@@ -24,7 +40,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: 400;
   line-height: 1.45;
-  color: #ccc; }
+  color: #E8DDCB; }
 
 p {
   margin-bottom: 1.3em; }
@@ -36,7 +52,6 @@ h1, h2, h3, h4 {
   line-height: 1.2; }
 
 h1 {
-  margin-top: 0;
   font-size: 2.441em; }
 
 h2 {
@@ -52,19 +67,40 @@ small, .font_small {
   font-size: 0.8em; }
 
 a {
-  color: #ccc; }
+  color: #E8DDCB; }
 
 input {
   font-size: 1em;
   text-transform: uppercase; }
+
+.modal h1,
+aside h2 {
+  margin-top: 0;
+  text-transform: uppercase;
+  font-weight: bolder; }
+
+aside h2,
+.app-module label {
+  text-align: center;
+  font-weight: bolder; }
+
+#data-comments p {
+  font-size: 1em;
+  line-height: 1.2em; }
+  #data-comments p:first-child {
+    font-size: 1.2em;
+    line-height: 0em; }
+
+#data-comments p:first-child,
+.app-module h3 {
+  color: #06c8a6; }
 
 .app-module h3 {
   display: block;
   margin: .45em .75em;
   padding: 0 0 1rem 0;
   text-align: center;
-  color: #676767;
-  border-bottom: 1px solid rgba(204, 204, 204, 0.05); }
+  border-bottom: 1px solid rgba(232, 221, 203, 0.05); }
 
 .modal {
   display: none;
@@ -75,7 +111,7 @@ input {
   right: 4rem;
   padding: 4rem;
   overflow: auto;
-  background: rgba(26, 26, 26, 0.96);
+  background: rgba(3, 54, 73, 0.96);
   -webkit-transform: translate(0, 100%);
   -ms-transform: translate(0, 100%);
   transform: translate(0, 100%);
@@ -86,7 +122,7 @@ input {
   .modal h1 {
     margin: 0 0 2rem 0;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(204, 204, 204, 0.1); }
+    border-bottom: 2px solid rgba(232, 221, 203, 0.1); }
   .modal h1 button.button {
     display: inline-block;
     float: right;
@@ -106,7 +142,7 @@ body {
   padding: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  background-color: #0d0d0d; }
+  background-color: #022431; }
 
 .app-wrapper {
   position: relative;
@@ -140,77 +176,73 @@ body {
     padding: 2rem 1rem 1rem; }
     .app-wrapper footer .right {
       padding: 1rem 1rem 0;
-      border-top: 1px solid rgba(204, 204, 204, 0.05); }
+      border-top: 1px solid rgba(232, 221, 203, 0.05); }
 
-dl.dropdown,
-dl.dropdown dd,
-dl.dropdown ul {
-  padding: 0;
-  margin: 0; }
-
-dl.dropdown a {
-  padding: .6rem 1rem;
-  font-size: 1.2em;
-  text-align: center;
-  color: #ccc;
-  text-decoration: none;
-  border: 1px solid rgba(26, 26, 26, 0.5); }
-
-dl.dropdown > a {
-  display: block;
-  position: relative;
-  padding: .6rem 1.6rem .6rem 1rem;
-  background-color: #1A1A1A;
-  -webkit-transition: background-color 0.35s ease-in-out;
-  transition: background-color 0.35s ease-in-out; }
-  dl.dropdown > a::after {
-    position: absolute;
-    right: 1em;
-    margin: .5em;
-    content: '';
-    border-width: .5em;
-    border-style: solid;
-    border-color: transparent;
-    border-top-color: #ccc;
-    -webkit-transform-origin: .5em .25em;
-    -ms-transform-origin: .5em .25em;
-    transform-origin: .5em .25em;
-    -webkit-transition: all 0.35s ease-in-out;
-    transition: all 0.35s ease-in-out; }
-  dl.dropdown > a:hover {
-    background-color: #272727; }
-
-dl.dropdown.active > a::after {
-  -webkit-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  transform: rotate(180deg); }
-
-dl.dropdown dd {
-  position: relative;
-  width: 100%; }
-
-dl.dropdown dd ul {
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  list-style-type: none;
-  max-height: 0;
-  overflow-y: hidden;
-  -webkit-transition: all .35s ease-in-out;
-  transition: all .35s ease-in-out; }
-  dl.dropdown dd ul li a {
+dl.dropdown {
+  background: #036564; }
+  dl.dropdown,
+  dl.dropdown dd,
+  dl.dropdown ul {
+    padding: 0;
+    margin: 0; }
+  dl.dropdown a {
+    padding: .6rem 1rem;
+    font-size: 1.2em;
+    text-align: center;
+    color: #E8DDCB;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(3, 101, 100, 0.5); }
+  dl.dropdown > a {
     display: block;
-    border-top: none;
-    background-color: #292929;
-    -webkit-transition: all 0.35s ease-in-out;
-    transition: all 0.35s ease-in-out; }
-    dl.dropdown dd ul li a:hover {
-      color: #ccc;
-      background-color: #222222; }
-
-dl.dropdown.active ul {
-  max-height: 100vh; }
+    position: relative;
+    padding: .6rem 1.6rem .6rem 1rem;
+    background-color: #048381;
+    -webkit-transition: background-color 0.35s ease-in-out;
+    transition: background-color 0.35s ease-in-out; }
+    dl.dropdown > a::after {
+      position: absolute;
+      right: 1em;
+      margin: .5em;
+      content: '';
+      border-width: .5em;
+      border-style: solid;
+      border-color: transparent;
+      border-top-color: #E8DDCB;
+      -webkit-transform-origin: .5em .25em;
+      -ms-transform-origin: .5em .25em;
+      transform-origin: .5em .25em;
+      -webkit-transition: all 0.35s ease-in-out;
+      transition: all 0.35s ease-in-out; }
+    dl.dropdown > a:hover {
+      background-color: #044861; }
+  dl.dropdown.active > a::after {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg); }
+  dl.dropdown dd {
+    position: relative;
+    width: 100%; }
+  dl.dropdown dd ul {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    list-style-type: none;
+    max-height: 0;
+    overflow-y: hidden;
+    -webkit-transition: all .35s ease-in-out;
+    transition: all .35s ease-in-out; }
+    dl.dropdown dd ul li a {
+      display: block;
+      border-top: none;
+      background-color: #048381;
+      -webkit-transition: all 0.35s ease-in-out;
+      transition: all 0.35s ease-in-out; }
+      dl.dropdown dd ul li a:hover {
+        color: #E8DDCB;
+        background-color: #06c8a6; }
+  dl.dropdown.active ul {
+    max-height: 100vh; }
 
 .area-chart {
   font-weight: lighter;
@@ -223,16 +255,16 @@ dl.dropdown.active ul {
 .area-chart .axisWhite,
 .area-chart .axisWhite .domain,
 .area-chart .axisWhite .tick line {
-  stroke: #ccc; }
+  stroke: #E8DDCB; }
 
 .grid line {
-  stroke: rgba(204, 204, 204, 0.8); }
+  stroke: rgba(232, 221, 203, 0.8); }
 
 .grid path {
   stroke-width: 0; }
 
 .area-chart .legend {
-  color: #ccc;
+  color: #E8DDCB;
   font-size: 18px; }
 
 .app-module {
@@ -240,18 +272,18 @@ dl.dropdown.active ul {
   display: table;
   margin: 1rem;
   width: 100%;
-  border: 1px solid rgba(204, 204, 204, 0.05); }
+  border: 1px solid rgba(232, 221, 203, 0.05); }
   .app-module .module--input,
   .app-module .module--output {
     display: table-cell; }
   .app-module .module--input {
     width: 25%;
-    background-color: #151515;
-    border-right: 1px solid rgba(204, 204, 204, 0.05); }
+    background-color: #032f3f;
+    border-right: 1px solid rgba(232, 221, 203, 0.05); }
   .app-module#canvas-wrapper,
   .app-module .module--output {
     width: 75%;
-    background-color: #101010; }
+    background-color: #022835; }
 
 form {
   position: relative;
@@ -262,6 +294,9 @@ fieldset {
   display: block;
   margin: 1rem;
   border: none; }
+
+label {
+  display: block; }
 
 form#data-analysis-parameter {
   position: relative; }
@@ -289,26 +324,19 @@ input[type="submit"] {
   width: 70%;
   font-size: .9em;
   border: none;
-  background: #1A1A1A;
-  color: #ccc;
+  background: #036564;
+  color: #E8DDCB;
   -webkit-transition: 0.35s ease-in-out;
   transition: 0.35s ease-in-out;
   cursor: pointer; }
   .button:hover,
   button:hover,
   input[type="submit"]:hover {
-    background: #010101; }
+    background: #06c8a6; }
 
 #data-comments {
   margin-top: .5rem;
   padding: .25rem .5rem; }
-  #data-comments p {
-    font-size: 1em;
-    line-height: 1.2em; }
-  #data-comments p:first-child {
-    font-size: 1.2em;
-    line-height: 0em;
-    color: #a6a6a6; }
 
 aside button.button {
   width: 100%;

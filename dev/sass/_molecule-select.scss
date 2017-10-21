@@ -1,5 +1,5 @@
 dl.dropdown {
-
+  background: $primary_color;
 
   &,
   dd,
@@ -14,8 +14,7 @@ dl.dropdown {
     text-align: center;
     color: $text_color;
     text-decoration: none;
-    border: 1px solid transparentize($primary_color, .5);
-
+    border-bottom: 1px solid transparentize($primary_color, .5);
   }
 
 
@@ -23,7 +22,7 @@ dl.dropdown {
     display: block;
     position: relative;
     padding: .6rem 1.6rem .6rem 1rem;
-    background-color: $primary_color;
+    background-color: lighten($primary_color, 6%);
     transition: background-color $animation;
 
     &::after {
@@ -71,7 +70,7 @@ dl.dropdown {
 
       &:hover {
         color: $text_color;
-        background-color: lighten($background_color, 3%);
+        background-color: $secondary_color;
       }
     }
   }

@@ -8,6 +8,9 @@ fieldset {
   margin: 1rem;
   border: none;
 }
+label {
+  display: block;
+}
 form#data-analysis-parameter {
   position: relative;
 
@@ -42,6 +45,6 @@ input[type="submit"] {
   cursor: pointer;
 
   &:hover {
-    background: darken( $background_color, 10%);
+    background: $secondary_color;
   }
 }

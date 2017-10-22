@@ -112,6 +112,7 @@ aside h2,
   padding: 4rem;
   overflow: auto;
   background: rgba(3, 54, 73, 0.96);
+  border: 10px solid #E8DDCB;
   -webkit-transform: translate(0, 100%);
   -ms-transform: translate(0, 100%);
   transform: translate(0, 100%);
@@ -280,6 +281,8 @@ dl.dropdown {
     width: 25%;
     background-color: #032f3f;
     border-right: 1px solid rgba(232, 221, 203, 0.05); }
+    .app-module .module--input .dropdown {
+      margin-top: 1rem; }
   .app-module#canvas-wrapper,
   .app-module .module--output {
     width: 75%;
@@ -305,16 +308,20 @@ form#data-analysis-parameter {
     width: 33%;
     float: left; }
 
+select,
 input {
   display: block;
   width: 100%;
   margin: 1rem auto;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  text-align: center;
   outline: none;
   border: 0;
   border-radius: 0; }
+
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; }
 
 .button,
 button,

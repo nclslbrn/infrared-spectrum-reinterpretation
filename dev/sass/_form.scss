@@ -20,16 +20,18 @@ form#data-analysis-parameter {
     float: left;
   }
 }
+select,
 input{
   display: block;
   width: 100%;
-
   margin: 1rem auto;
-
-  appearance: none;
+  text-align: center;
   outline: none;
   border: 0;
   border-radius: 0;
+}
+input {
+  appearance: none;
 }
 .button,
 button,

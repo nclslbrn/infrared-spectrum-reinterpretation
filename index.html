@@ -1,8 +1,8 @@
 <html lang="fr">
   <!--
-  	Processing Squetch
+  	Infrared Spectrum Reinterpretation
     Author: Nicolas Lebrun
-    Link: https://github.com/nclslbrn
+    Link: https://github.com/nclslbrn/infrared-spectrum-reinterpretation
   -->
   <head>
   	<meta charset="utf-8">
@@ -32,6 +32,21 @@
             <div class="module--input">
               <h3>Sound reinterpretation</h3>
               <form method="POST" id="sound-parameter">
+                <fieldset>
+                  <label for="molecule-select">Current oscillator type: <span id="current-oscillator-type"></span></label>
+                  <dl id="oscillator-type-dropdown" class="dropdown">
+                    <a href="#" class="dropdown-button" data-activate="setup_synth">Select an oscillator type</a>
+                    <dd>
+                      <ul>
+                        <li><a class="link" href="#" data-oscillator="pwm">Pwm</a></li>
+                        <li><a class="link" href="#" data-oscillator="sine">Sine</a></li>
+                        <li><a class="link" href="#" data-oscillator="triangle">Triangle</a></li>
+                        <li><a class="link" href="#" data-oscillator="sawtooth">Sawtooth</a></li>
+                        <li><a class="link" href="#" data-oscillator="square">Square</a></li>
+                      </ul>
+                    </dd>
+                  </dl>
+                </fieldset>
               <fieldset>
                 <label for="minFrequency">Minimum frequency</label>
                 <input type="range" min="1" max="100" value="50" class="slider" id="minFrequency">
@@ -94,7 +109,7 @@
       </main>
       <aside>
         <h2>Infrared Spectrum Reinterpretation</h2>
-        <dl id="molecule-select" class="dropdown">
+        <dl id="molecule-dropdown" class="dropdown">
           <a href="#" class="dropdown-button" data-activate="dropdown-molecule">Select a molecule</a>
           <dd>
             <ul>

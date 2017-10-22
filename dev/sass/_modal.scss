@@ -8,6 +8,7 @@
   padding: 4rem;
   overflow: auto;
   background: transparentize($background_color, .04);
+  border: 10px solid $text_color;
   transform: translate(0, 100%);
   transition: transform $animation;
   h1 {

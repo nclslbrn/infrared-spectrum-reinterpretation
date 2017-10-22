@@ -1,13 +1,35 @@
 /**!
  * File audio-synthesis.js
  */
+var oscillatorTypeDropdown = document.getElementById('oscillator-type-dropdown');
+var oscillatorsType = Array.prototype.slice.call(oscillatorTypeDropdown.getElementsByClassName('link'));
+var oscillatorTypeLabel = document.getElementById('current-oscillator-type');
+var oscillatorTypeName = null;
+
+oscillatorsType.forEach( function( oscillator ) {
+
+ 		oscillator.addEventListener('click', function(e){
+
+ 			  var oscillatorTypeName = this.getAttribute('data-oscillator');
+        oscillatorTypeLabel.innerHTML = oscillatorTypeName;
+        make_sound();
+
+    }, false);
+});
+
+if( !oscillatorTypeName ) {
+
+  oscillatorTypeName = 'sine';
+  oscillatorTypeLabel.innerHTML = oscillatorTypeName;
+
+}
 
 
-function make_sound( transmitanceHit ) {
+function make_sound() {
 
     var synth = new Tone.PolySynth(3, Tone.Synth, {
         'oscillator' : {
-          'type' : 'fatsawtooth',
+          'type' : oscillatorTypeName,
           'count' : 3,
           'spread' : 30
         },
@@ -38,8 +60,7 @@ function make_sound( transmitanceHit ) {
 
     }
     //console.log(transmitanceThreshold);
-    console.log(notes);
-
+    //console.log(notes);
 
     var part = new Tone.Part(function(time, note){
 			synth.triggerAttackRelease(note.note, now + note.time, time, 1);
@@ -65,7 +86,9 @@ dropdowns.forEach(function( dropdown ) {
     dropdown.addEventListener('click', function(e){
 
         e.preventDefault();
-        this.parentElement.classList.toggle('active');
+        var targetId = this.parentElement.id;
+        document.getElementById(targetId).classList.toggle('active');
+
 
     }, false);
 
@@ -74,7 +97,9 @@ dropdowns.forEach(function( dropdown ) {
         link.addEventListener('click', function(e){
 
             e.preventDefault();
-            this.parentElement.parentElement.parentElement.parentElement.classList.toggle('active');
+            var targetId = this.parentElement.parentElement.parentElement.parentElement.id;
+            console.log(targetId);
+            document.getElementById(targetId).classList.remove('active');
 
         });
     });
@@ -90,7 +115,8 @@ dropdowns.forEach(function( dropdown ) {
  */
 
 var molecule_ir_data = new Array();
-var molecule_select = document.getElementById('molecule-select');
+var transmitanceHit = [];
+var moleculeDropdown = document.getElementById('molecule-dropdown');
 
 get_JDX_data = function loadJDX(filePath, success, error) {
 		var xhr = new XMLHttpRequest();
@@ -184,7 +210,7 @@ function filter_JDX_data(data) {
 		make_sound( transmitanceHit );
 }
 
-var molecules_entry = Array.prototype.slice.call(molecule_select.getElementsByClassName('link'));
+var molecules_entry = Array.prototype.slice.call(moleculeDropdown.getElementsByClassName('link'));
 
 molecules_entry.forEach( function( molecule ) {
 

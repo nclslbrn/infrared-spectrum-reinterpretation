@@ -8,7 +8,8 @@
  */
 
 var molecule_ir_data = new Array();
-var molecule_select = document.getElementById('molecule-select');
+var transmitanceHit = [];
+var moleculeDropdown = document.getElementById('molecule-dropdown');
 
 get_JDX_data = function loadJDX(filePath, success, error) {
 		var xhr = new XMLHttpRequest();
@@ -102,7 +103,7 @@ function filter_JDX_data(data) {
 		make_sound( transmitanceHit );
 }
 
-var molecules_entry = Array.prototype.slice.call(molecule_select.getElementsByClassName('link'));
+var molecules_entry = Array.prototype.slice.call(moleculeDropdown.getElementsByClassName('link'));
 
 molecules_entry.forEach( function( molecule ) {
 

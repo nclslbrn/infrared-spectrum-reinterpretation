@@ -11,7 +11,9 @@ dropdowns.forEach(function( dropdown ) {
     dropdown.addEventListener('click', function(e){
 
         e.preventDefault();
-        this.parentElement.classList.toggle('active');
+        var targetId = this.parentElement.id;
+        document.getElementById(targetId).classList.toggle('active');
+
 
     }, false);
 
@@ -20,7 +22,9 @@ dropdowns.forEach(function( dropdown ) {
         link.addEventListener('click', function(e){
 
             e.preventDefault();
-            this.parentElement.parentElement.parentElement.parentElement.classList.toggle('active');
+            var targetId = this.parentElement.parentElement.parentElement.parentElement.id;
+            console.log(targetId);
+            document.getElementById(targetId).classList.remove('active');
 
         });
     });

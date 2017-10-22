@@ -9,11 +9,14 @@
   .module--output {
     display: table-cell;
   }
-
   .module--input {
     width: 25%;
     background-color: darken($background_color, 2%);
     border-right: 1px solid transparentize($text_color, .95);
+
+    .dropdown {
+      margin-top: 1rem;
+    }
   }
   &#canvas-wrapper,
   .module--output {

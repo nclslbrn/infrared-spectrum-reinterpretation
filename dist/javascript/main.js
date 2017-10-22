@@ -1,10 +1,12 @@
 /**!
  * File audio-synthesis.js
  */
+
 var oscillatorTypeDropdown = document.getElementById('oscillator-type-dropdown');
 var oscillatorsType = Array.prototype.slice.call(oscillatorTypeDropdown.getElementsByClassName('link'));
 var oscillatorTypeLabel = document.getElementById('current-oscillator-type');
 var oscillatorTypeName = null;
+var sequenceContainer = document.getElementById('resulted-sequence');
 
 oscillatorsType.forEach( function( oscillator ) {
 
@@ -19,7 +21,7 @@ oscillatorsType.forEach( function( oscillator ) {
 
 if( !oscillatorTypeName ) {
 
-  oscillatorTypeName = 'sine';
+  oscillatorTypeName = 'pwm';
   oscillatorTypeLabel.innerHTML = oscillatorTypeName;
 
 }
@@ -44,29 +46,44 @@ function make_sound() {
 
     var notes = [];
     var duration = 0;
-    var now = Tone.now();
 
     for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
-        var time =  transmitanceHit[n].transmitance;
+        var time =  Math.round(1000*transmitanceHit[n].transmitance)/1000;
+        
         var note = {
-          'note': new Tone.Frequency(transmitanceHit[n].frequency, 'midi').toNote(),
+          //'note': new Tone.Frequency(transmitanceHit[n].frequency, 'midi').toNote(),
+          'note': transmitanceHit[n].frequency,
           'time': time
         };
         notes.push(note);
         duration = duration + time;
 
-        //console.log( ir_data[n].value + '<' + ir_data[n-1].value );
-
     }
-    //console.log(transmitanceThreshold);
+
     //console.log(notes);
 
+    var now = Tone.now();
+    var currentTime = now;
+    var currentNote = 0;
     var part = new Tone.Part(function(time, note){
-			synth.triggerAttackRelease(note.note, now + note.time, time, 1);
+
+      var visualNote = document.createElement('span');
+      visualNote.innerHTML = note.note;
+      visualNote.style.width = ((note.time / duration) * 100) + '%';
+      sequenceContainer.appendChild( visualNote );
+
+			synth.triggerAttackRelease(note.note, (time + note.time), time);
+
+      currentTime = currentTime + note.time;
+      currentNote++;
+
 		}, notes);
 
-    part.start(now);
+
+
+    part.start(0);
+    part.loopEnd = '1m';
     part.stop(now + duration);
 
     Tone.Transport.start();
@@ -98,7 +115,6 @@ dropdowns.forEach(function( dropdown ) {
 
             e.preventDefault();
             var targetId = this.parentElement.parentElement.parentElement.parentElement.id;
-            console.log(targetId);
             document.getElementById(targetId).classList.remove('active');
 
         });
@@ -114,9 +130,21 @@ dropdowns.forEach(function( dropdown ) {
  * @version 1.0.0
  */
 
-var molecule_ir_data = new Array();
+var moleculeIrData = new Array();
 var transmitanceHit = [];
 var moleculeDropdown = document.getElementById('molecule-dropdown');
+
+var transmitanceThresholdSlider = document.getElementById('transmitanceThreshold');
+var transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
+
+var stepDurationFactorSlider = document.getElementById('stepDurationFactor');
+var stepDurationFactor = stepDurationFactorSlider.value / 10;
+
+var updateTransmitanceHit = function() {
+	getTransmitanceHit();
+	make_sound();
+}
+
 
 get_JDX_data = function loadJDX(filePath, success, error) {
 		var xhr = new XMLHttpRequest();
@@ -142,7 +170,7 @@ get_JDX_data = function loadJDX(filePath, success, error) {
  */
 function filter_JDX_data(data) {
 
-		molecule_ir_data = new Array();
+		moleculeIrData = new Array();
 	  //split raw text by line
 	  var lines = data.split( "\n" );
 
@@ -161,7 +189,7 @@ function filter_JDX_data(data) {
 								var data_column = lines[n].split(" ");
 
 								// Store data in global var
-								molecule_ir_data.push({
+								moleculeIrData.push({
 									frequency: parseFloat(data_column[0]),
 									value: parseFloat(data_column[1])
 								});
@@ -201,13 +229,13 @@ function filter_JDX_data(data) {
 		// Once the whole document is parsed
 
 		//get transmitance hit (depends to threshold slider value)
-		transmitanceHit = getTransmitanceHit( molecule_ir_data )
+		transmitanceHit = getTransmitanceHit();
 
 		// fire our function to make a chart
-		chart_this( molecule_ir_data );
+		chart_this( moleculeIrData );
 
 		// fire our function to make sound
-		make_sound( transmitanceHit );
+		make_sound();
 }
 
 var molecules_entry = Array.prototype.slice.call(moleculeDropdown.getElementsByClassName('link'));
@@ -228,10 +256,9 @@ molecules_entry.forEach( function( molecule ) {
 
 get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
 
-function getTransmitanceHit( molecule_ir_data ) {
+function getTransmitanceHit() {
 
-		var transmitanceThreshold = document.getElementById('transmitanceThreshold').value / 1000;
-		var ir_data = Array.prototype.slice.call(molecule_ir_data);
+		var ir_data = Array.prototype.slice.call(moleculeIrData);
 		var transmitanceHit = [];
 
 		for ( var n = 1; n < ir_data.length; n++ ) {
@@ -244,7 +271,7 @@ function getTransmitanceHit( molecule_ir_data ) {
 
 					var hit = {
 						transmitance: ir_data[n].value,
-						frequency: ir_data[n].frequency
+						frequency: Math.round(ir_data[n].frequency)
 					};
 
 					transmitanceHit.push( hit );
@@ -291,7 +318,7 @@ function setup(){
 function draw(){
   background(0);
 
-  molecule_ir_data.forEach( function( data ) {
+  moleculeIrData.forEach( function( data ) {
     console.log( data.value );
   });
 }
@@ -301,9 +328,9 @@ function draw(){
  * File: wavelength.js
  */
 
-function chart_this( molecule_ir_data ) {
+function chart_this( moleculeIrData ) {
 
-  var ir_data = Array.prototype.slice.call(molecule_ir_data);
+  var ir_data = Array.prototype.slice.call(moleculeIrData);
   var container = document.getElementById('canvas-wrapper');
   var button = document.getElementsByClassName('button')[0];
   var waveColor = document.defaultView.getComputedStyle( button ,null).getPropertyValue('background-color');

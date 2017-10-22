@@ -11,15 +11,7 @@ fieldset {
 label {
   display: block;
 }
-form#data-analysis-parameter {
-  position: relative;
 
-  fieldset {
-    display: inline-block;
-    width: 33%;
-    float: left;
-  }
-}
 select,
 input{
   display: block;

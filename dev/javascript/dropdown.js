@@ -23,7 +23,6 @@ dropdowns.forEach(function( dropdown ) {
 
             e.preventDefault();
             var targetId = this.parentElement.parentElement.parentElement.parentElement.id;
-            console.log(targetId);
             document.getElementById(targetId).classList.remove('active');
 
         });

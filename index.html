@@ -20,12 +20,19 @@
       <main>
         <div class="app-module">
           <div id="canvas-wrapper"></div>
-          <form method="POST" id="data-analysis-parameter">
-            <fieldset>
-              <label for="minFrequency">Threshold (used to detect hits on transmitance)</label>
-              <input type="range" min="0" max="100" value="25" class="slider" id="transmitanceThreshold">
-            </fieldset>
-          </form>
+          <div class="module--input">
+            <form method="POST" id="data-analysis-parameter">
+              <fieldset>
+                <label for="minFrequency">Threshold (used to detect hits on transmitance)</label>
+                <input type="range" min="0" max="100" value="25" class="slider" id="transmitanceThreshold">
+              </fieldset>
+
+              <fieldset>
+                <label for="minFrequency">Step duration factor</label>
+                <input type="range" min="0" max="100" value="25" class="slider" id="stepDurationFactor">
+              </fieldset>
+            </form>
+          </div>
         </div>
 
         <div id="sound-module" class="app-module">
@@ -35,7 +42,7 @@
                 <fieldset>
                   <label for="molecule-select">Current oscillator type: <span id="current-oscillator-type"></span></label>
                   <dl id="oscillator-type-dropdown" class="dropdown">
-                    <a href="#" class="dropdown-button" data-activate="setup_synth">Select an oscillator type</a>
+                    <a href="#" class="dropdown-button" data-activate="setup_synth">Select a type of oscillator</a>
                     <dd>
                       <ul>
                         <li><a class="link" href="#" data-oscillator="pwm">Pwm</a></li>
@@ -60,6 +67,7 @@
             </form>
           </div>
           <div class="module--output">
+            <div id="resulted-sequence"></div>
           </div>
         </div>
 

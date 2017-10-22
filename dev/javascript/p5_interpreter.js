@@ -14,7 +14,7 @@ function setup(){
 function draw(){
   background(0);
 
-  molecule_ir_data.forEach( function( data ) {
+  moleculeIrData.forEach( function( data ) {
     console.log( data.value );
   });
 }

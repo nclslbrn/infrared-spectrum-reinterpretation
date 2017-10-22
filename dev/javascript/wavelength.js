@@ -2,9 +2,9 @@
  * File: wavelength.js
  */
 
-function chart_this( molecule_ir_data ) {
+function chart_this( moleculeIrData ) {
 
-  var ir_data = Array.prototype.slice.call(molecule_ir_data);
+  var ir_data = Array.prototype.slice.call(moleculeIrData);
   var container = document.getElementById('canvas-wrapper');
   var button = document.getElementsByClassName('button')[0];
   var waveColor = document.defaultView.getComputedStyle( button ,null).getPropertyValue('background-color');

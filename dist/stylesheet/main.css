@@ -81,8 +81,10 @@ aside h2 {
 
 aside h2,
 .app-module label {
-  text-align: center;
   font-weight: bolder; }
+
+.app-module label {
+  text-align: center; }
 
 #data-comments p {
   font-size: 1em;
@@ -149,8 +151,7 @@ body {
   position: relative;
   display: block;
   width: 100%;
-  min-width: 1440px;
-  height: 100vh;
+  min-width: 100%;
   margin: 0 auto; }
   .app-wrapper main,
   .app-wrapper aside {
@@ -268,26 +269,6 @@ dl.dropdown {
   color: #E8DDCB;
   font-size: 18px; }
 
-.app-module {
-  position: relative;
-  display: table;
-  margin: 1rem;
-  width: 100%;
-  border: 1px solid rgba(232, 221, 203, 0.05); }
-  .app-module .module--input,
-  .app-module .module--output {
-    display: table-cell; }
-  .app-module .module--input {
-    width: 25%;
-    background-color: #032f3f;
-    border-right: 1px solid rgba(232, 221, 203, 0.05); }
-    .app-module .module--input .dropdown {
-      margin-top: 1rem; }
-  .app-module#canvas-wrapper,
-  .app-module .module--output {
-    width: 75%;
-    background-color: #022835; }
-
 form {
   position: relative;
   display: block;
@@ -300,13 +281,6 @@ fieldset {
 
 label {
   display: block; }
-
-form#data-analysis-parameter {
-  position: relative; }
-  form#data-analysis-parameter fieldset {
-    display: inline-block;
-    width: 33%;
-    float: left; }
 
 select,
 input {
@@ -340,6 +314,68 @@ input[type="submit"] {
   button:hover,
   input[type="submit"]:hover {
     background: #06c8a6; }
+
+.app-module {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 1rem;
+  width: 100%;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  clear: both;
+  float: none;
+  border: 1px solid rgba(232, 221, 203, 0.05); }
+  .app-module .module--input {
+    -ms-flex-preferred-size: 25%;
+    flex-basis: 25%;
+    background-color: #032f3f;
+    border-right: 1px solid rgba(232, 221, 203, 0.05); }
+    .app-module .module--input .dropdown {
+      margin-top: 1rem; }
+  .app-module:first-child,
+  .app-module:first-child form {
+    display: block; }
+  .app-module:first-child .module--input fieldset {
+    display: inline-block;
+    width: 46%;
+    margin: 1rem 1%;
+    float: left; }
+  .app-module#canvas-wrapper,
+  .app-module .module--output {
+    -ms-flex-preferred-size: 75%;
+    flex-basis: 75%;
+    background-color: #022835; }
+
+#sound-module.app-module .module--output > div {
+  position: relative;
+  display: block;
+  margin: 2rem;
+  padding: .25rem;
+  height: 4rem;
+  border: 1px solid #04445d; }
+  #sound-module.app-module .module--output > div span {
+    position: relative;
+    display: inline-block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    float: left;
+    min-height: 4rem;
+    font-size: 1rem;
+    color: #033649;
+    text-align: center;
+    line-height: 4rem;
+    overflow: hidden;
+    background-color: #06c8a6;
+    border-right: 1px solid #022835; }
 
 #data-comments {
   margin-top: .5rem;

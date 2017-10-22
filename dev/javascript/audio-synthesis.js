@@ -1,10 +1,12 @@
 /**!
  * File audio-synthesis.js
  */
+
 var oscillatorTypeDropdown = document.getElementById('oscillator-type-dropdown');
 var oscillatorsType = Array.prototype.slice.call(oscillatorTypeDropdown.getElementsByClassName('link'));
 var oscillatorTypeLabel = document.getElementById('current-oscillator-type');
 var oscillatorTypeName = null;
+var sequenceContainer = document.getElementById('resulted-sequence');
 
 oscillatorsType.forEach( function( oscillator ) {
 
@@ -19,7 +21,7 @@ oscillatorsType.forEach( function( oscillator ) {
 
 if( !oscillatorTypeName ) {
 
-  oscillatorTypeName = 'sine';
+  oscillatorTypeName = 'pwm';
   oscillatorTypeLabel.innerHTML = oscillatorTypeName;
 
 }
@@ -44,29 +46,44 @@ function make_sound() {
 
     var notes = [];
     var duration = 0;
-    var now = Tone.now();
 
     for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
-        var time =  transmitanceHit[n].transmitance;
+        var time =  Math.round(1000*transmitanceHit[n].transmitance)/1000;
+        
         var note = {
-          'note': new Tone.Frequency(transmitanceHit[n].frequency, 'midi').toNote(),
+          //'note': new Tone.Frequency(transmitanceHit[n].frequency, 'midi').toNote(),
+          'note': transmitanceHit[n].frequency,
           'time': time
         };
         notes.push(note);
         duration = duration + time;
 
-        //console.log( ir_data[n].value + '<' + ir_data[n-1].value );
-
     }
-    //console.log(transmitanceThreshold);
+
     //console.log(notes);
 
+    var now = Tone.now();
+    var currentTime = now;
+    var currentNote = 0;
     var part = new Tone.Part(function(time, note){
-			synth.triggerAttackRelease(note.note, now + note.time, time, 1);
+
+      var visualNote = document.createElement('span');
+      visualNote.innerHTML = note.note;
+      visualNote.style.width = ((note.time / duration) * 100) + '%';
+      sequenceContainer.appendChild( visualNote );
+
+			synth.triggerAttackRelease(note.note, (time + note.time), time);
+
+      currentTime = currentTime + note.time;
+      currentNote++;
+
 		}, notes);
 
-    part.start(now);
+
+
+    part.start(0);
+    part.loopEnd = '1m';
     part.stop(now + duration);
 
     Tone.Transport.start();

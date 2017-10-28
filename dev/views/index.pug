@@ -52,8 +52,9 @@ html(lang="fr")
   body
     div(class="app-wrapper")
       main
-        div.app-module
-          div#canvas-wrapper
+        div#chart-module.app-module
+          div#canvas-wrapper.module--output
+          // #canvas-wrapper.module--output
           div.module--input
             form(method="POST" id="data-analysis-parameter")
               fieldset
@@ -66,6 +67,8 @@ html(lang="fr")
                   Step duration factor:
                   #[output#stepDurationFactorOutput]
                 input(type="range" min="0" max="100" value="25" class="slider" id="stepDurationFactor")
+          // .module--input
+        // #chart-module.app-module
         div#sound-module.app-module
           div.module--input
             h3 Sound reinterpretation
@@ -101,8 +104,12 @@ html(lang="fr")
                   #[output#maximumSoundFrequency]
                 input(type="range" min="1" max="100" value="50" class="slider" id="minFrequency")
               button(id="playSound" type="button" name="playSound") Play
+          // .module--input
           div.module--output
             div#resulted-sequence
+          // .module--output
+        // #sound-module.app-module
+      // main    
       aside
         h2 Infrared Spectrum Reinterpretation
         dl#molecule-dropdown.dropdown
@@ -115,17 +122,17 @@ html(lang="fr")
         div#data-comments
         
         button(class="button modal-button" data-toggle="comment-source-file-modal") Read all comments of the source file
-        
+      // aside
       footer
         div.right
           p.
             Infrared Spectrum Reinterprettion is an open source project under MIT License, see the source 
             code on #[a(href="https://github.com/nclslbrn/infrared-spectrum-reinterpretation" target="blank") Github.com]
             .
-      
+      // footer
       div#comment-source-file-modal.modal
         h1.
           Comments of the source file
           #[button(class="button modal-button" data-toggle="comment-source-file-modal")!="&times;"]
-      
+      // #comment-source-file-modal.modal
       include templates/scripts.pug

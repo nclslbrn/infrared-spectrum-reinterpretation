@@ -282,7 +282,7 @@ fieldset {
 label {
   display: block; }
 
-select,
+button,
 input {
   display: block;
   width: 100%;
@@ -298,8 +298,7 @@ input {
   appearance: none; }
 
 .button,
-button,
-input[type="submit"] {
+button {
   display: block;
   padding: 1rem 0;
   width: 70%;
@@ -311,8 +310,7 @@ input[type="submit"] {
   transition: 0.35s ease-in-out;
   cursor: pointer; }
   .button:hover,
-  button:hover,
-  input[type="submit"]:hover {
+  button:hover {
     background: #06c8a6; }
 
 .app-module {

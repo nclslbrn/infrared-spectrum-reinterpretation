@@ -13,17 +13,34 @@ var moleculeDropdown = document.getElementById('molecule-dropdown');
 
 var transmitanceThresholdSlider = document.getElementById('transmitanceThreshold');
 var transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
+var transmitanceThresholdOutput = document.getElementById('transmitanceThresholdOutput');
 
 var stepDurationFactorSlider = document.getElementById('stepDurationFactor');
 var stepDurationFactor = stepDurationFactorSlider.value / 10;
+var stepDurationFactorOutput = document.getElementById('stepDurationFactorOutput');
 
-var updateTransmitanceHit = function() {
-	getTransmitanceHit();
-	make_sound();
-}
+// Return input range value
+// 1. Transmitance threshold
+transmitanceThresholdSlider.addEventListener('input', function() {
 
+		transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
+    transmitanceThresholdOutput.innerHTML = transmitanceThreshold;
+		getTransmitanceHit();
 
+}, false);
+
+// 2. Step duration factor
+stepDurationFactorSlider.addEventListener('input', function() {
+
+		stepDurationFactor = stepDurationFactorSlider.value / 10;
+    stepDurationFactorOutput.innerHTML = stepDurationFactor;
+		getTransmitanceHit();
+
+}, false);
+
+// Gt the content of the .jdx file
 get_JDX_data = function loadJDX(filePath, success, error) {
+
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 
@@ -39,12 +56,10 @@ get_JDX_data = function loadJDX(filePath, success, error) {
 		};
 		xhr.open("GET", filePath, true);
 		xhr.send();
+
 }
-/**
- * Filter Data
- * @param data a string with the whole file
- * @param line Line : Frequency + " " +  Transmitance + " " +Absorbance
- */
+
+// Filter the source file
 function filter_JDX_data(data) {
 
 		moleculeIrData = new Array();
@@ -75,9 +90,9 @@ function filter_JDX_data(data) {
 
 					      // Show data origin and comments
 					      var container = document.getElementById('data-comments');
-								var modal = document.getElementById('comment-source-file-modal');
-								var extract = document.createElement('p');
-								var content = document.createElement('p');
+								var modal 		= document.getElementById('comment-source-file-modal');
+								var extract 	= document.createElement('p');
+								var content 	= document.createElement('p');
 
 								// But delete the two first # before adding to the html markup
 								if( firstChar == "#" ) {
@@ -106,7 +121,7 @@ function filter_JDX_data(data) {
 		// Once the whole document is parsed
 
 		//get transmitance hit (depends to threshold slider value)
-		transmitanceHit = getTransmitanceHit();
+		getTransmitanceHit();
 
 		// fire our function to make a chart
 		chart_this( moleculeIrData );
@@ -114,6 +129,9 @@ function filter_JDX_data(data) {
 		// fire our function to make sound
 		make_sound();
 }
+
+// Load a default file
+get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
 
 var molecules_entry = Array.prototype.slice.call(moleculeDropdown.getElementsByClassName('link'));
 
@@ -126,17 +144,17 @@ molecules_entry.forEach( function( molecule ) {
 				document.getElementById('data-comments').innerHTML = "";
 
 				get_JDX_data(file,  filter_JDX_data);
+				make_sound();
 
 		}, false);
 });
 
 
-get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
 
 function getTransmitanceHit() {
 
 		var ir_data = Array.prototype.slice.call(moleculeIrData);
-		var transmitanceHit = [];
+		transmitanceHit = [];
 
 		for ( var n = 1; n < ir_data.length; n++ ) {
 

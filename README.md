@@ -10,8 +10,10 @@ Infrared spectrums come from NIST (National Institute of Standards and Technolog
 due to a server limitation we have to download files manually from [nist.gov](http://webbook.nist.gov/chemistry/name-ser/)
 and put into a folder data/, and put each link into the `<ul>` index.html file like below.
 
-Spectrum vizualisation is made with [D3.js v4](https://github.com/d3/d3).
+Spectrum vizualisation (area chart) is made with [D3.js v4](https://github.com/d3/d3).
+
 Audio synthesis with [Tone.js](https://github.com/Tonejs/Tone.js).
+
 Others features 'll come asap...
 
 

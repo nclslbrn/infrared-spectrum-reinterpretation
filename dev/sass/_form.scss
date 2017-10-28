@@ -12,7 +12,7 @@ label {
   display: block;
 }
 
-select,
+button,
 input{
   display: block;
   width: 100%;
@@ -26,8 +26,7 @@ input {
   appearance: none;
 }
 .button,
-button,
-input[type="submit"] {
+button {
   display: block;
   padding: 1rem 0;
   width: 70%;

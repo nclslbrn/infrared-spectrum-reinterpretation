@@ -11,6 +11,7 @@ var sass = require('gulp-sass'),
     del = require('del'),
     watch = require('gulp-watch'),
     sourcemaps = require('gulp-sourcemaps'),
+    pug = require('gulp-pug'),
     ignore = require('gulp-ignore'),
     zip = require('gulp-zip'),
     browserSync = require('browser-sync'),
@@ -26,12 +27,14 @@ var directory = {
   dev : {
     styles: 'dev/sass/*.scss',
     scripts: 'dev/javascript/**.js',
-    images: 'dev/images/*'
+    images: 'dev/images/*',
+    views: 'dev/views/*.pug'
   },
   dist : {
     styles: 'dist/stylesheet/',
     scripts: 'dist/javascript/',
-    images: 'dist/images/'
+    images: 'dist/images/',
+    views: './'
   }
 }
 
@@ -68,32 +71,40 @@ gulp.task('images', function() {
     .pipe(gulp.dest(directory.dist.images))
     .pipe(notify({ message: 'Images task complete' }));
 });
+
+
+gulp.task('views', function buildHTML() {
+  return gulp.src(directory.dev.views)
+    .pipe(pug())
+    .pipe(gulp.dest(directory.dist.views))
+    .pipe(notify({ message: 'Views task complete' }));
+});
+
 gulp.task('sync', function() {
     //watch files
     var files = [
-    directory.dist.styles,
-    directory.dist.scripts,
-    directory.dist.images,
-    'index.html'
+        directory.dist.styles,
+        directory.dist.scripts,
+        directory.dist.images,
+        'index.html'
     ];
-
     //initialize browsersync
     browserSync.init(files, {
-      //browsersync with a php server
-      proxy: "p5.sketch/infrared-spectrum-reinterpretation/",
-      port: 8080,
-      notify: true,
-      injectChanges: true
+        //browsersync with a php server
+        proxy: "p5.sketch/infrared-spectrum-reinterpretation/",
+        port: 8080,
+        notify: true,
+        injectChanges: true
     });
 });
 
 gulp.task('watch', ['sync'], function () {
-  gulp.watch(directory.dev.styles, ['styles']);
-  gulp.watch(directory.dev.scripts, ['scripts']);
-  gulp.watch(directory.dev.images, ['images']);
-  gulp.watch('**/.DS_Store', ['remove']);
-  gulp.watch('index.html');
-
+    gulp.watch(directory.dev.styles, ['styles']);
+    gulp.watch(directory.dev.scripts, ['scripts']);
+    gulp.watch(directory.dev.images, ['images']);
+    gulp.watch(directory.dev.views, ['views']);
+    gulp.watch('**/.DS_Store', ['remove']);
+    gulp.watch('index.html');
 });
 
 
@@ -109,7 +120,7 @@ gulp.task('remove', function() {
 
 gulp.task('build', function() {
 
-  gulp.src(['**/**','!node_modules/**','!dist/**','!**/.sass-cache','!**/.DS_Store'])
+  gulp.src(['**/**','!node_modules/**','!dev/**','!**/.sass-cache','!**/.DS_Store'])
   	.pipe(zip('infrared-spectrum-reinterpretation.zip'))
   	.pipe(gulp.dest('../'))
   	.pipe(notify({ message: 'Zip task complete', onLast: true }));

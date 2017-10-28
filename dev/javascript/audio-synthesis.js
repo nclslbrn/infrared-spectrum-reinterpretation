@@ -2,11 +2,14 @@
  * File audio-synthesis.js
  */
 
+var frequencyRange = { min: 0, max: 1200 };
+
 var oscillatorTypeDropdown = document.getElementById('oscillator-type-dropdown');
-var oscillatorsType = Array.prototype.slice.call(oscillatorTypeDropdown.getElementsByClassName('link'));
-var oscillatorTypeLabel = document.getElementById('current-oscillator-type');
-var oscillatorTypeName = null;
-var sequenceContainer = document.getElementById('resulted-sequence');
+var oscillatorsType        = Array.prototype.slice.call(oscillatorTypeDropdown.getElementsByClassName('link'));
+var oscillatorTypeLabel    = document.getElementById('current-oscillator-type-output');
+var oscillatorTypeName     = null;
+var sequenceContainer      = document.getElementById('resulted-sequence');
+var playButton             = document.getElementById('playSound');
 
 oscillatorsType.forEach( function( oscillator ) {
 
@@ -14,7 +17,6 @@ oscillatorsType.forEach( function( oscillator ) {
 
  			  var oscillatorTypeName = this.getAttribute('data-oscillator');
         oscillatorTypeLabel.innerHTML = oscillatorTypeName;
-        make_sound();
 
     }, false);
 });
@@ -25,6 +27,23 @@ if( !oscillatorTypeName ) {
   oscillatorTypeLabel.innerHTML = oscillatorTypeName;
 
 }
+
+playButton.addEventListener('click', function(e) {
+
+  make_sound();
+
+  if( playButton.classList.contains('active')) {
+
+    make_sound();
+    playButton.innerHTML = 'Stop';
+    playButton.classList = 'active';
+    
+  } else {
+
+    Tone.Transport.stop();
+
+  }
+});
 
 
 function make_sound() {
@@ -50,23 +69,25 @@ function make_sound() {
     for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
         var time =  Math.round(1000*transmitanceHit[n].transmitance)/1000;
-        
+
         var note = {
           //'note': new Tone.Frequency(transmitanceHit[n].frequency, 'midi').toNote(),
           'note': transmitanceHit[n].frequency,
           'time': time
         };
+
         notes.push(note);
         duration = duration + time;
 
     }
 
     //console.log(notes);
+    sequenceContainer.innerHTML = '';
 
     var now = Tone.now();
     var currentTime = now;
     var currentNote = 0;
-    var part = new Tone.Part(function(time, note){
+    var part = new Tone.Part( function(time, note) {
 
       var visualNote = document.createElement('span');
       visualNote.innerHTML = note.note;

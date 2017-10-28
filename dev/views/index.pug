@@ -93,16 +93,11 @@ html(lang="fr")
                         a(class="link" href="#" data-oscillator="square") Square
                         
               fieldset
-                label(for="minFrequency").
-                  Minimum frequency
-                  #[output#minimumSoundFrequency]
-                input(type="range" min="1" max="100" value="50" class="slider" id="minFrequency")
+                label(for="transpose").
+                  Transpose
+                  #[output#transpose]
+                input(type="range" min="1" max="100" value="50" class="slider" id="transpose")
                 
-              fieldset
-                label(for="minFrequency").
-                  Maximun frequency
-                  #[output#maximumSoundFrequency]
-                input(type="range" min="1" max="100" value="50" class="slider" id="minFrequency")
               button(id="playSound" type="button" name="playSound") Play
           // .module--input
           div.module--output

@@ -36,7 +36,7 @@ dev/views/index.pug and add an entry in the array named `moleculeDataFile` like 
 ```
 
 Then you have to build the html files with running `gulp views`.
-<br>
+
 --------
 
 ### Dependencies
@@ -49,7 +49,7 @@ Others features 'll come asap...
 Due to the loading of these by XMLHttpRequest,
 this script could work only on server (local or distant).
 
-<br>
+
 --------
 
 

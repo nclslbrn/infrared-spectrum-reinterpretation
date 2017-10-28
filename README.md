@@ -21,8 +21,9 @@ and put into a folder data/, and put each link into the `<ul>` index.html file l
   </dd>
 </dl>
 ```
-If you ar familiar with [Pug](https://pugjs.org/api/getting-started.html) you can also link a new file with editing
-dev/views/index.pug and add an entry in the array named `moleculeDataFile` like below
+If you ar familiar with [Pug](https://pugjs.org/api/getting-started.html) and [Gulp](https://gulpjs.com) you can also link a new file with editing
+dev/views/index.pug and add an entry in the array named `moleculeDataFile` like below (you have to load every dependencies with `npm install --save-dev`)
+
 ```javascript
 
   var moleculeDataFile = [
@@ -34,6 +35,12 @@ dev/views/index.pug and add an entry in the array named `moleculeDataFile` like 
   ];
 ```
 
+Then you have to build the html files with running `gulp views`.
+<br>
+--------
+
+### Dependencies
+
 Spectrum vizualisation (area chart) is made with [D3.js v4](https://github.com/d3/d3).
 
 Audio synthesis with [Tone.js](https://github.com/Tonejs/Tone.js).
@@ -42,6 +49,10 @@ Others features 'll come asap...
 Due to the loading of these by XMLHttpRequest,
 this script could work only on server (local or distant).
 
--------
+<br>
+--------
+
+
+### The purpose of this work
 
 This project is produced within the framework of a part of the COSA research group, which studies relation between art and science.

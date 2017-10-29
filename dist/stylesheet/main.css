@@ -313,6 +313,26 @@ button {
   button:hover {
     background: #06c8a6; }
 
+button span.play,
+button span.stop {
+  display: inline-block;
+  margin-right: .5em; }
+
+button span.play {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: .5em;
+  border-right-width: 0;
+  border-left-width: 1em;
+  border-color: transparent;
+  border-left-color: #E8DDCB; }
+
+button span.stop {
+  width: 1em;
+  height: 1em;
+  background-color: #E8DDCB; }
+
 .app-module {
   position: relative;
   display: -webkit-box;

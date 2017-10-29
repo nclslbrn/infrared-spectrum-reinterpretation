@@ -95,10 +95,14 @@ html(lang="fr")
               fieldset
                 label(for="transpose").
                   Transpose
-                  #[output#transpose]
+                  #[output#transposeOutput]
                 input(type="range" min="1" max="100" value="50" class="slider" id="transpose")
                 
-              button(id="playSound" type="button" name="playSound") Play
+              button(id="playSound" type="button" name="playSound").
+                #[span.play]
+                Play
+                
+                
           // .module--input
           div.module--output
             div#resulted-sequence

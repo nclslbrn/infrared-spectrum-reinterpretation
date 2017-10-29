@@ -41,3 +41,26 @@ button {
     background: $secondary_color;
   }
 }
+
+button {
+  span.play,
+  span.stop {
+    display: inline-block;
+    margin-right: .5em;
+  }
+  span.play {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: .5em;
+    border-right-width: 0;
+    border-left-width: 1em;
+    border-color: rgba(0, 0, 0, 0);
+    border-left-color: $text_color;
+  }
+  span.stop {
+    width: 1em;
+    height: 1em;
+    background-color: $text_color;
+  }
+}

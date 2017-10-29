@@ -13,9 +13,10 @@ $primary_color: #850D66;
  * light gray
  */
 /*
-$background_color: #fff;
+$background_color: #fefefe;
 $text_color: #333;
-$primary_color: #aaa;
+$primary_color: #87ef59;
+$secondary_color: adjust-hue($primary_color, -10%);
 */
 
 /**
@@ -34,10 +35,9 @@ $primary_color: #697065;
 $background_color: #033649;
 $text_color: #E8DDCB;
 $primary_color: #036564;
-
-
-
 $secondary_color: lighten(adjust-hue($primary_color, -10%), 20%);
+
+
 
 
 $heading_font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";

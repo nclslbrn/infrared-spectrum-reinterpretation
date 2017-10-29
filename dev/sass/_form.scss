@@ -41,7 +41,9 @@ button {
     background: $secondary_color;
   }
 }
-
+form fieldset dl.dropdown > a {
+  font-size: 1em;
+}
 button {
   span.play,
   span.stop {

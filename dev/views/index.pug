@@ -53,85 +53,19 @@ html(lang="fr")
     div(class="app-wrapper")
       main
         div#chart-module.app-module
-          div#canvas-wrapper.module--output
-          // #canvas-wrapper.module--output
-          div.module--input
-            form(method="POST" id="data-analysis-parameter")
-              fieldset
-                label(for="transmitanceThreshold").
-                  Threshold (used to detect hits on transmitance):
-                  #[output#transmitanceThresholdOutput]
-                input(type="range" min="0" max="100" value="25" class="slider" id="transmitanceThreshold")
-              fieldset
-                label(for="stepDurationFactor").
-                  Step duration factor:
-                  #[output#stepDurationFactorOutput]
-                input(type="range" min="0" max="100" value="25" class="slider" id="stepDurationFactor")
-          // .module--input
+          include templates/chart-module.pug
         // #chart-module.app-module
         div#sound-module.app-module
-          div.module--input
-            h3 Sound reinterpretation
-            form(method="POST" id="sound-parameter")
-              fieldset
-                label(for="oscillator-type-dropdown").
-                  Current oscillator type:
-                  #[output#current-oscillator-type-output]
-                dl#oscillator-type-dropdown.dropdown
-                  a(href="#" class="dropdown-button" data-activate="setup_synth") Select a type of oscillator
-                  dd
-                    ul
-                      li
-                        a(class="link" href="#" data-oscillator="pwm") Pwm
-                      li
-                        a(class="link" href="#" data-oscillator="sine") Sine
-                      li
-                        a(class="link" href="#" data-oscillator="triangle") Triangle
-                      li
-                        a(class="link" href="#" data-oscillator="sawtooth") Sawtooth
-                      li
-                        a(class="link" href="#" data-oscillator="square") Square
-                        
-              fieldset
-                label(for="transpose").
-                  Transpose
-                  #[output#transposeOutput]
-                input(type="range" min="1" max="100" value="50" class="slider" id="transpose")
-                
-              button(id="playSound" type="button" name="playSound").
-                #[span.play]
-                Play
-                
-                
-          // .module--input
-          div.module--output
-            div#resulted-sequence
-          // .module--output
+          include templates/sound-module.pug
         // #sound-module.app-module
       // main    
       aside
-        h2 Infrared Spectrum Reinterpretation
-        dl#molecule-dropdown.dropdown
-          a(href='#' class="dropdown-button" data-activate="dropdown-molecule") Select a molecule
-          dd
-            ul
-              each link in moleculeDataFile
-                li
-                  a(class="link" href="#" data-file="data/" + link.file) #{link.title}
-        div#data-comments
-        
-        button(class="button modal-button" data-toggle="comment-source-file-modal") Read all comments of the source file
+        include templates/aside.pug
       // aside
       footer
-        div.right
-          p.
-            Infrared Spectrum Reinterprettion is an open source project under MIT License, see the source 
-            code on #[a(href="https://github.com/nclslbrn/infrared-spectrum-reinterpretation" target="blank") Github.com]
-            .
+        include templates/footer.pug
       // footer
       div#comment-source-file-modal.modal
-        h1.
-          Comments of the source file
-          #[button(class="button modal-button" data-toggle="comment-source-file-modal")!="&times;"]
+        include templates/modal.pug
       // #comment-source-file-modal.modal
       include templates/scripts.pug

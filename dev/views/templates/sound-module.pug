@@ -1,0 +1,37 @@
+div.module--input
+  h3 Sound reinterpretation
+  form(method="POST" id="sound-parameter")
+    fieldset
+      label(for="oscillator-type-dropdown").
+        Current oscillator type:
+        #[output#current-oscillator-type-output]
+      dl#oscillator-type-dropdown.dropdown
+        a(href="#" class="dropdown-button" data-activate="setup_synth") Select a type of oscillator
+        dd
+          ul
+            li
+              a(class="link" href="#" data-oscillator="pwm") Pwm
+            li
+              a(class="link" href="#" data-oscillator="sine") Sine
+            li
+              a(class="link" href="#" data-oscillator="triangle") Triangle
+            li
+              a(class="link" href="#" data-oscillator="sawtooth") Sawtooth
+            li
+              a(class="link" href="#" data-oscillator="square") Square
+              
+    fieldset
+      label(for="transpose").
+        Transpose
+        #[output#transposeOutput]
+      input(type="range" min="-50" max="50" value="0" class="slider" id="transpose")
+      
+    button(id="playSound" type="button" name="playSound").
+      #[span.play]
+      Play
+              
+      
+// .module--input
+div.module--output
+  div#resulted-sequence
+// .module--output

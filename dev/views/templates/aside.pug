@@ -1,0 +1,11 @@
+h2 Infrared Spectrum Reinterpretation
+dl#molecule-dropdown.dropdown
+  a(href='#' class="dropdown-button" data-activate="dropdown-molecule") Select a molecule
+  dd
+    ul
+      each link in moleculeDataFile
+        li
+          a(class="link" href="#" data-file="data/" + link.file) #{link.title}
+div#data-comments
+
+button(class="button modal-button" data-toggle="comment-source-file-modal") Read all comments of the source file

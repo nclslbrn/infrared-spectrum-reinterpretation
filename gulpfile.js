@@ -28,13 +28,20 @@ var directory = {
     styles: 'dev/sass/*.scss',
     scripts: 'dev/javascript/**.js',
     images: 'dev/images/*',
-    views: 'dev/views/*.pug'
+    views: {
+      watch: 'dev/views/**/*.pug',
+      do: 'dev/views/*.pug'
+    },
+    lib: 'lib/*',
+    data: 'data/*',
   },
   dist : {
     styles: 'dist/stylesheet/',
     scripts: 'dist/javascript/',
     images: 'dist/images/',
-    views: './'
+    views: 'dist/',
+    lib: 'dist/javascript/lib',
+    data: 'dist/data/'
   }
 }
 
@@ -74,7 +81,7 @@ gulp.task('images', function() {
 
 
 gulp.task('views', function buildHTML() {
-  return gulp.src(directory.dev.views)
+  return gulp.src(directory.dev.views.do)
     .pipe(pug())
     .pipe(gulp.dest(directory.dist.views))
     .pipe(notify({ message: 'Views task complete' }));
@@ -86,12 +93,12 @@ gulp.task('sync', function() {
         directory.dist.styles,
         directory.dist.scripts,
         directory.dist.images,
-        'index.html'
+        'dist/index.html'
     ];
     //initialize browsersync
     browserSync.init(files, {
         //browsersync with a php server
-        proxy: "p5.sketch/infrared-spectrum-reinterpretation/",
+        proxy: "p5.sketch/infrared-spectrum-reinterpretation/dist",
         port: 8080,
         notify: true,
         injectChanges: true
@@ -102,7 +109,9 @@ gulp.task('watch', ['sync'], function () {
     gulp.watch(directory.dev.styles, ['styles']);
     gulp.watch(directory.dev.scripts, ['scripts']);
     gulp.watch(directory.dev.images, ['images']);
-    gulp.watch(directory.dev.views, ['views']);
+    gulp.watch(directory.dev.views.watch, ['views']);
+    gulp.watch(directory.dev.lib, ['build']);
+    gulp.watch(directory.dev.data, ['copyData']);
     gulp.watch('**/.DS_Store', ['remove']);
     gulp.watch('index.html');
 });
@@ -120,11 +129,17 @@ gulp.task('remove', function() {
 
 gulp.task('build', function() {
 
-  gulp.src(['**/**','!node_modules/**','!dev/**','!**/.sass-cache','!**/.DS_Store'])
-  	.pipe(zip('infrared-spectrum-reinterpretation.zip'))
-  	.pipe(gulp.dest('../'))
-  	.pipe(notify({ message: 'Zip task complete', onLast: true }));
+  gulp.src(directory.dev.lib)
+  	.pipe(gulp.dest(directory.dist.lib))
+  	.pipe(notify({ message: 'Lib added to dist', onLast: true }));
 
 });
 
+gulp.task('copyData', function() {
+
+  gulp.src(directory.dev.data)
+  	.pipe(gulp.dest(directory.dist.data))
+  	.pipe(notify({ message: 'Data file added to dist', onLast: true }));
+
+});
 gulp.task('default',['watch']);

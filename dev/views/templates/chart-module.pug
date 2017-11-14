@@ -1,0 +1,15 @@
+div#canvas-wrapper.module--output
+// #canvas-wrapper.module--output
+div.module--input
+  form(method="POST" id="data-analysis-parameter")
+    fieldset
+      label(for="transmitanceThreshold").
+        Threshold (used to detect hits on transmitance):
+        #[output#transmitanceThresholdOutput]
+      input(type="range" min="0" max="100" value="39" class="slider" id="transmitanceThreshold")
+    fieldset
+      label(for="stepDurationFactor").
+        Step duration factor:
+        #[output#stepDurationFactorOutput]
+      input(type="range" min="0" max="100" value="25" class="slider" id="stepDurationFactor")
+// .module--input

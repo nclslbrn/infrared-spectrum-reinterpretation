@@ -1,3 +1,4 @@
 data/*.jdx
+dist/data/*.jdx
 node_modules/*
 .DS_Store

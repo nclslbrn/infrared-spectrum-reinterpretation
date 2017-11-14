@@ -27,8 +27,8 @@ function chart_this( moleculeIrData ) {
 
   var svg = d3.select("body #canvas-wrapper").insert("svg").attr('class', 'area-chart')
       .datum(ir_data)
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " "  + (height + margin.top + margin.bottom ) )
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 

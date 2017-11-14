@@ -10,6 +10,7 @@
 var moleculeIrData = new Array();
 var transmitanceHit = [];
 var moleculeDropdown = document.getElementById('molecule-dropdown');
+var molecules_entry = Array.prototype.slice.call(moleculeDropdown.getElementsByClassName('link'));
 
 var transmitanceThresholdSlider = document.getElementById('transmitanceThreshold');
 var transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
@@ -19,6 +20,23 @@ var stepDurationFactorSlider = document.getElementById('stepDurationFactor');
 var stepDurationFactor = stepDurationFactorSlider.value / 10;
 var stepDurationFactorOutput = document.getElementById('stepDurationFactorOutput');
 
+// If a molecule is selected load the file
+molecules_entry.forEach( function( molecule ) {
+
+		molecule.addEventListener('click', function(e){
+
+			  var file = this.getAttribute('data-file');
+				// reinit html markup
+				document.getElementById('canvas-wrapper').innerHTML = "";
+				document.getElementById('data-comments').innerHTML = "";
+
+				get_JDX_data(file,  filter_JDX_data);
+				getTransmitanceHit();
+				make_sound();
+
+		}, false);
+});
+
 // Return input range value
 // 1. Transmitance threshold
 transmitanceThresholdSlider.addEventListener('input', function() {
@@ -26,6 +44,7 @@ transmitanceThresholdSlider.addEventListener('input', function() {
 		transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
     transmitanceThresholdOutput.innerHTML = transmitanceThreshold;
 		getTransmitanceHit();
+		make_sound();
 
 }, false);
 
@@ -35,8 +54,11 @@ stepDurationFactorSlider.addEventListener('input', function() {
 		stepDurationFactor = stepDurationFactorSlider.value / 10;
     stepDurationFactorOutput.innerHTML = stepDurationFactor;
 		getTransmitanceHit();
+		make_sound();
 
 }, false);
+
+
 
 // Gt the content of the .jdx file
 get_JDX_data = function loadJDX(filePath, success, error) {
@@ -47,17 +69,22 @@ get_JDX_data = function loadJDX(filePath, success, error) {
 				if (xhr.readyState === XMLHttpRequest.DONE) {
 						if (xhr.status === 200) {
 								if (success)
-									success(xhr.responseText);
+										success(xhr.responseText);
 				} else {
 						if (error)
 								error(xhr);
 						}
 				}
+
 		};
 		xhr.open("GET", filePath, true);
 		xhr.send();
 
 }
+
+// Load a default file
+// Usefull for development
+get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
 
 // Filter the source file
 function filter_JDX_data(data) {
@@ -130,30 +157,11 @@ function filter_JDX_data(data) {
 		make_sound();
 }
 
-// Load a default file
-get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
-
-var molecules_entry = Array.prototype.slice.call(moleculeDropdown.getElementsByClassName('link'));
-
-molecules_entry.forEach( function( molecule ) {
-
-		molecule.addEventListener('click', function(e){
-
-			  var file = this.getAttribute('data-file');
-				document.getElementById('canvas-wrapper').innerHTML = "";
-				document.getElementById('data-comments').innerHTML = "";
-
-				get_JDX_data(file,  filter_JDX_data);
-				make_sound();
-
-		}, false);
-});
-
-
 
 function getTransmitanceHit() {
 
 		var ir_data = Array.prototype.slice.call(moleculeIrData);
+		// reinit var
 		transmitanceHit = [];
 
 		for ( var n = 1; n < ir_data.length; n++ ) {

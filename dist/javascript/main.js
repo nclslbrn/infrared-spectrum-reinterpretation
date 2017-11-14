@@ -1,16 +1,27 @@
 /**!
  * File audio-synthesis.js
  */
-
-var frequencyRange = { min: 0, max: 1200 };
+var synth                  = null;
+var frequencyRange         = { min: 0, max: 1200 };
+var part                   = new Tone.Part();
+var notes                  = [];
+var duration               = 0;
+var oscillatorTypeName     = null;
 
 var oscillatorTypeDropdown = document.getElementById('oscillator-type-dropdown');
 var oscillatorsType        = Array.prototype.slice.call(oscillatorTypeDropdown.getElementsByClassName('link'));
 var oscillatorTypeLabel    = document.getElementById('current-oscillator-type-output');
-var oscillatorTypeName     = null;
+
 var sequenceContainer      = document.getElementById('resulted-sequence');
+
 var playButton             = document.getElementById('playSound');
 
+var transposeSlider        = document.getElementById('transpose');
+var transpose              = transposeSlider.value;
+var transposeOutput        = document.getElementById('transposeOutput');
+
+
+// Detect change in oscillator type dropdown
 oscillatorsType.forEach( function( oscillator ) {
 
  		oscillator.addEventListener('click', function(e){
@@ -21,6 +32,7 @@ oscillatorsType.forEach( function( oscillator ) {
     }, false);
 });
 
+// Set a default oscillator if no one is choosed
 if( !oscillatorTypeName ) {
 
   oscillatorTypeName = 'pwm';
@@ -28,27 +40,53 @@ if( !oscillatorTypeName ) {
 
 }
 
+// Fire play function or stop on click event on play/stop button
 playButton.addEventListener('click', function(e) {
 
-  make_sound();
-
-  if( playButton.classList.contains('active')) {
-
-    make_sound();
-    playButton.innerHTML = 'Stop';
-    playButton.classList = 'active';
+  if( part.state == "started") {
+    Tone.Transport.stop();
     
-  } else {
-
+    playButton.classList = '';
+    playButton.innerHTML = '<span class="play"></span> Play';
+    part.stop(0);
     Tone.Transport.stop();
 
+
+
+  } else if( part.state !== 'started') {
+    Tone.Transport.stop();
+
+    //make_sound();
+    play_sound();
+
+    playButton.classList = 'active';
+    playButton.innerHTML = '<span class="stop"></span> Stop';
+
+    part.start();
+
   }
+
 });
+//console.log(part.state);
+// Change seqeunce frequency value when user change the transpose value
+transposeSlider.addEventListener('input', function() {
+/*
+    if(part.state !== 'started' ) {
+      part.stop(0);
+    }
+*/
+  //  part.removeAll();
+    Tone.Transport.stop();
+		transpose = Number(transposeSlider.value);
+    transposeOutput.innerHTML = transpose;
+    make_sound();
 
+}, false);
 
+// Init the synth and load sequence into `notes`
 function make_sound() {
 
-    var synth = new Tone.PolySynth(3, Tone.Synth, {
+    synth = new Tone.MonoSynth({
         'oscillator' : {
           'type' : oscillatorTypeName,
           'count' : 3,
@@ -63,51 +101,77 @@ function make_sound() {
         },
       }).toMaster();
 
-    var notes = [];
-    var duration = 0;
-
+    sequenceContainer.innerHTML = '';
     for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
-        var time =  Math.round(1000*transmitanceHit[n].transmitance)/1000;
+      var time =  Math.round(1000*transmitanceHit[n].transmitance)/1000;
+      duration = duration + time;
+    }
+    for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
+        // Transmitance value is use to mode note duration
+        // we have to round it for better performance
+        var time =  Math.round(1000*transmitanceHit[n].transmitance)/1000;
+        // Change the frequency value according to transpose value
+        // 1 octave = 20hertz
+        var finalNote = transmitanceHit[n].frequency + ( transpose * 180);
         var note = {
-          //'note': new Tone.Frequency(transmitanceHit[n].frequency, 'midi').toNote(),
-          'note': transmitanceHit[n].frequency,
+          'pitch_octave_note': new Tone.Frequency(finalNote, 'midi').toNote(),
+          'frequency_note': finalNote,
           'time': time
         };
+        console.log( note.frequency_note + ' => ' + finalNote );
+        var visualNote = document.createElement('span');
+        visualNote.id = 'note-' + n;
+        visualNote.innerHTML = note.pitch_octave_note;
+        visualNote.style.width = ((note.time / duration) * 100) + '%';
+
+        sequenceContainer.appendChild( visualNote );
 
         notes.push(note);
-        duration = duration + time;
-
     }
+}
 
-    //console.log(notes);
-    sequenceContainer.innerHTML = '';
+// Play sound and change the background color
+// of played note into sequenceContainer
+function play_sound() {
+
+    // Remove played class in case of replay
+    var everyVisualNotes = Array.prototype.slice.call(sequenceContainer.getElementsByTagName('span'));
+    everyVisualNotes.forEach( function(visualNote){
+        visualNote.classList = '';
+    });
 
     var now = Tone.now();
     var currentTime = now;
-    var currentNote = 0;
-    var part = new Tone.Part( function(time, note) {
+    var currentNote = 1;
 
-      var visualNote = document.createElement('span');
-      visualNote.innerHTML = note.note;
-      visualNote.style.width = ((note.time / duration) * 100) + '%';
-      sequenceContainer.appendChild( visualNote );
+    part = new Tone.Part( function(time, note) {
 
-			synth.triggerAttackRelease(note.note, (time + note.time), time);
+      // Highlight the current note on the sequence container
+      var playedNoteId = 'note-' + currentNote;
+      var playedNote = document.getElementById(playedNoteId);
 
-      currentTime = currentTime + note.time;
-      currentNote++;
+      if( playedNote ) {
 
-		}, notes);
+          playedNote.classList = 'played';
 
+          // Trigger the note with the synth
+          synth.triggerAttackRelease(note.frequency_note, (time + note.time), time, .15);
 
+          // Loop through every note
+          currentTime = currentTime + note.time;
+          currentNote++;
 
-    part.start(0);
-    part.loopEnd = '1m';
-    part.stop(now + duration);
+      }
+
+    }, notes);
+    // part.start(0);
+    // part.loopEnd = '1m';
+    // part.stop(now + duration);
 
     Tone.Transport.start();
+
 
 }
 
@@ -154,6 +218,7 @@ dropdowns.forEach(function( dropdown ) {
 var moleculeIrData = new Array();
 var transmitanceHit = [];
 var moleculeDropdown = document.getElementById('molecule-dropdown');
+var molecules_entry = Array.prototype.slice.call(moleculeDropdown.getElementsByClassName('link'));
 
 var transmitanceThresholdSlider = document.getElementById('transmitanceThreshold');
 var transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
@@ -163,6 +228,23 @@ var stepDurationFactorSlider = document.getElementById('stepDurationFactor');
 var stepDurationFactor = stepDurationFactorSlider.value / 10;
 var stepDurationFactorOutput = document.getElementById('stepDurationFactorOutput');
 
+// If a molecule is selected load the file
+molecules_entry.forEach( function( molecule ) {
+
+		molecule.addEventListener('click', function(e){
+
+			  var file = this.getAttribute('data-file');
+				// reinit html markup
+				document.getElementById('canvas-wrapper').innerHTML = "";
+				document.getElementById('data-comments').innerHTML = "";
+
+				get_JDX_data(file,  filter_JDX_data);
+				getTransmitanceHit();
+				make_sound();
+
+		}, false);
+});
+
 // Return input range value
 // 1. Transmitance threshold
 transmitanceThresholdSlider.addEventListener('input', function() {
@@ -170,6 +252,7 @@ transmitanceThresholdSlider.addEventListener('input', function() {
 		transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
     transmitanceThresholdOutput.innerHTML = transmitanceThreshold;
 		getTransmitanceHit();
+		make_sound();
 
 }, false);
 
@@ -179,8 +262,11 @@ stepDurationFactorSlider.addEventListener('input', function() {
 		stepDurationFactor = stepDurationFactorSlider.value / 10;
     stepDurationFactorOutput.innerHTML = stepDurationFactor;
 		getTransmitanceHit();
+		make_sound();
 
 }, false);
+
+
 
 // Gt the content of the .jdx file
 get_JDX_data = function loadJDX(filePath, success, error) {
@@ -191,17 +277,22 @@ get_JDX_data = function loadJDX(filePath, success, error) {
 				if (xhr.readyState === XMLHttpRequest.DONE) {
 						if (xhr.status === 200) {
 								if (success)
-									success(xhr.responseText);
+										success(xhr.responseText);
 				} else {
 						if (error)
 								error(xhr);
 						}
 				}
+
 		};
 		xhr.open("GET", filePath, true);
 		xhr.send();
 
 }
+
+// Load a default file
+// Usefull for development
+get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
 
 // Filter the source file
 function filter_JDX_data(data) {
@@ -274,30 +365,11 @@ function filter_JDX_data(data) {
 		make_sound();
 }
 
-// Load a default file
-get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
-
-var molecules_entry = Array.prototype.slice.call(moleculeDropdown.getElementsByClassName('link'));
-
-molecules_entry.forEach( function( molecule ) {
-
-		molecule.addEventListener('click', function(e){
-
-			  var file = this.getAttribute('data-file');
-				document.getElementById('canvas-wrapper').innerHTML = "";
-				document.getElementById('data-comments').innerHTML = "";
-
-				get_JDX_data(file,  filter_JDX_data);
-				make_sound();
-
-		}, false);
-});
-
-
 
 function getTransmitanceHit() {
 
 		var ir_data = Array.prototype.slice.call(moleculeIrData);
+		// reinit var
 		transmitanceHit = [];
 
 		for ( var n = 1; n < ir_data.length; n++ ) {
@@ -392,8 +464,8 @@ function chart_this( moleculeIrData ) {
 
   var svg = d3.select("body #canvas-wrapper").insert("svg").attr('class', 'area-chart')
       .datum(ir_data)
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " "  + (height + margin.top + margin.bottom ) )
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 

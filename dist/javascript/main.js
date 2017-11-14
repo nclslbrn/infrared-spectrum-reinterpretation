@@ -45,7 +45,7 @@ playButton.addEventListener('click', function(e) {
 
   if( part.state == "started") {
     Tone.Transport.stop();
-    
+
     playButton.classList = '';
     playButton.innerHTML = '<span class="play"></span> Play';
     part.stop(0);
@@ -86,21 +86,6 @@ transposeSlider.addEventListener('input', function() {
 // Init the synth and load sequence into `notes`
 function make_sound() {
 
-    synth = new Tone.MonoSynth({
-        'oscillator' : {
-          'type' : oscillatorTypeName,
-          'count' : 3,
-          'spread' : 30
-        },
-        'envelope': {
-          'attack': 0.01,
-          'decay': 0.1,
-          'sustain': 0.5,
-          'release': 0.4,
-          'attackCurve' : 'exponential'
-        },
-      }).toMaster();
-
     sequenceContainer.innerHTML = '';
     for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
@@ -135,7 +120,20 @@ function make_sound() {
 // Play sound and change the background color
 // of played note into sequenceContainer
 function play_sound() {
-
+  synth = new Tone.MonoSynth({
+      'oscillator' : {
+        'type' : oscillatorTypeName,
+        'count' : 3,
+        'spread' : 30
+      },
+      'envelope': {
+        'attack': 0.01,
+        'decay': 0.1,
+        'sustain': 0.5,
+        'release': 0.4,
+        'attackCurve' : 'exponential'
+      },
+    }).toMaster();
     // Remove played class in case of replay
     var everyVisualNotes = Array.prototype.slice.call(sequenceContainer.getElementsByTagName('span'));
     everyVisualNotes.forEach( function(visualNote){
@@ -171,8 +169,6 @@ function play_sound() {
     // part.stop(now + duration);
 
     Tone.Transport.start();
-
-
 }
 
 /**!
@@ -272,6 +268,7 @@ stepDurationFactorSlider.addEventListener('input', function() {
 get_JDX_data = function loadJDX(filePath, success, error) {
 
 		var xhr = new XMLHttpRequest();
+		xhr.overrideMimeType('text/plain');
 		xhr.onreadystatechange = function() {
 
 				if (xhr.readyState === XMLHttpRequest.DONE) {

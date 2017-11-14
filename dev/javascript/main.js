@@ -64,6 +64,7 @@ stepDurationFactorSlider.addEventListener('input', function() {
 get_JDX_data = function loadJDX(filePath, success, error) {
 
 		var xhr = new XMLHttpRequest();
+		xhr.overrideMimeType('text/plain');
 		xhr.onreadystatechange = function() {
 
 				if (xhr.readyState === XMLHttpRequest.DONE) {

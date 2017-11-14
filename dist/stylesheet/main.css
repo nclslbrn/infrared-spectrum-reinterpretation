@@ -18,9 +18,10 @@ $primary_color: #850D66;
  * light gray
  */
 /*
-$background_color: #fff;
+$background_color: #fefefe;
 $text_color: #333;
-$primary_color: #aaa;
+$primary_color: #87ef59;
+$secondary_color: adjust-hue($primary_color, -10%);
 */
 /**
  * darkish
@@ -114,7 +115,7 @@ aside h2,
   padding: 4rem;
   overflow: auto;
   background: rgba(3, 54, 73, 0.96);
-  border: 10px solid #E8DDCB;
+  border: 10px solid #036564;
   -webkit-transform: translate(0, 100%);
   -ms-transform: translate(0, 100%);
   transform: translate(0, 100%);
@@ -163,9 +164,12 @@ body {
     padding: 0 1%;
     float: left; }
   .app-wrapper .app-module #canvas-wrapper {
-    display: block;
-    min-height: 42vh;
-    width: 100%; }
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 28.5%;
+    vertical-align: top;
+    overflow: hidden; }
   .app-wrapper aside {
     position: relative;
     width: 19%;
@@ -247,6 +251,10 @@ dl.dropdown {
     max-height: 100vh; }
 
 .area-chart {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
   font-weight: lighter;
   shape-rendering: geometricPrecision; }
 
@@ -312,6 +320,9 @@ button {
   .button:hover,
   button:hover {
     background: #06c8a6; }
+
+form fieldset dl.dropdown > a {
+  font-size: 1em; }
 
 button span.play,
 button span.stop {
@@ -394,6 +405,8 @@ button span.stop {
     overflow: hidden;
     background-color: #06c8a6;
     border-right: 1px solid #022835; }
+  #sound-module.app-module .module--output > div span.played {
+    background-color: #E8DDCB; }
 
 #data-comments {
   margin-top: .5rem;

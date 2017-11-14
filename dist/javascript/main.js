@@ -67,21 +67,19 @@ playButton.addEventListener('click', function(e) {
   }
 
 });
-//console.log(part.state);
-// Change seqeunce frequency value when user change the transpose value
+// Change sequence frequency value when user change the transpose value
 transposeSlider.addEventListener('input', function() {
-/*
-    if(part.state !== 'started' ) {
-      part.stop(0);
-    }
-*/
-  //  part.removeAll();
+
     Tone.Transport.stop();
 		transpose = Number(transposeSlider.value);
     transposeOutput.innerHTML = transpose;
-    make_sound();
 
 }, false);
+
+// Build or rebuild the sound
+transposeSlider.addEventListener('mouseup', function() {
+    make_sound();
+});
 
 // Init the synth and load sequence into `notes`
 function make_sound() {

@@ -1,4 +1,5 @@
 data/*.jdx
+gulp-tasks/ftp-deploy.js
 dist/data/*.jdx
 node_modules/*
 .DS_Store

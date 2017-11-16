@@ -15,7 +15,10 @@ var sass = require('gulp-sass'),
     ignore = require('gulp-ignore'),
     zip = require('gulp-zip'),
     browserSync = require('browser-sync'),
+    require = require('require-dir'),
     reload = browserSync.reload;
+// gulp deploy
+var deployFTP = require('./gulp-tasks');
 
 var COMPATIBILITY = [
   'last 2 versions',

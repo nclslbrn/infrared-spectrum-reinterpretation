@@ -7,6 +7,8 @@ This project is a tool for reinterpreting, transcoding infrared analysis of vari
 - sounds
 - motion keys
 
+[Visit the website](https://transcoded.artemg.com)
+
 Infrared spectrums come from NIST (National Institute of Standards and Technology - U.S. Department of Commerce),
 due to a server limitation we have to download files manually from [nist.gov](http://webbook.nist.gov/chemistry/name-ser/)
 and put into a folder data/, and put each link into the `<ul>` index.html file like below.

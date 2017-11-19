@@ -6,8 +6,10 @@
  * @license MIT
  * @version 1.0.0
  */
-
+@import url('https://rsms.me/inter/inter-ui.css');
 @import 'settings';
+@import 'loader';
+@import 'svg-sprite-animation';
 @import 'typography';
 @import 'modal';
 @import 'layers';

@@ -13,13 +13,11 @@ p {margin-bottom: 1.3em;}
 h1, h2, h3, h4 {
   font-family: $heading_font;
   margin: 1.414em 0 0.5em;
-  font-weight: inherit;
+  font-weight: bolder;
   line-height: 1.2;
 }
 
-h1 {
-  font-size: 2.441em;
-}
+h1 {font-size: 2.441em;}
 
 h2 {font-size: 1.953em;}
 
@@ -45,6 +43,10 @@ aside h2,
 }
 .app-module label {
   text-align: center;
+}
+aside h2 {
+  white-space: pre-line;
+  font-size: 2.04vw;
 }
 #data-comments p {
   font-size: 1em;

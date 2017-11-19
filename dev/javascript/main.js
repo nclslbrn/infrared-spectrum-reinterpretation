@@ -40,24 +40,26 @@ molecules_entry.forEach( function( molecule ) {
 // Return input range value
 // 1. Transmitance threshold
 transmitanceThresholdSlider.addEventListener('input', function() {
-
 		transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
     transmitanceThresholdOutput.innerHTML = transmitanceThreshold;
-		getTransmitanceHit();
-		make_sound();
 
 }, false);
+transmitanceThresholdSlider.addEventListener('mouseup', function() {
+		getTransmitanceHit();
+		make_sound();
+});
 
 // 2. Step duration factor
 stepDurationFactorSlider.addEventListener('input', function() {
 
 		stepDurationFactor = stepDurationFactorSlider.value / 10;
     stepDurationFactorOutput.innerHTML = stepDurationFactor;
-		getTransmitanceHit();
-		make_sound();
 
 }, false);
 
+stepDurationFactorSlider.addEventListener('mouseup', function() {
+    make_sound();
+});
 
 
 // Gt the content of the .jdx file

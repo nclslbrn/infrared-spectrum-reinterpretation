@@ -13,7 +13,7 @@ dropdowns.forEach(function( dropdown ) {
         e.preventDefault();
         var targetId = this.parentElement.id;
         document.getElementById(targetId).classList.toggle('active');
-
+        stopPart();
 
     }, false);
 

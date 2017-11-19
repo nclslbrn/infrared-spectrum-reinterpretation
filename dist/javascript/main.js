@@ -20,7 +20,7 @@ var transposeSlider        = document.getElementById('transpose');
 var transpose              = transposeSlider.value;
 var transposeOutput        = document.getElementById('transposeOutput');
 
-
+var totalTimeLabel         = document.getElementById('total-time');
 // Detect change in oscillator type dropdown
 oscillatorsType.forEach( function( oscillator ) {
 
@@ -39,31 +39,39 @@ if( !oscillatorTypeName ) {
   oscillatorTypeLabel.innerHTML = oscillatorTypeName;
 
 }
+function stopPart() {
+  Tone.Transport.stop();
+  console.log('stopPart() used');
+}
 
+function play_button_behaviour(state) {
+
+  if( state == 'stopped' ) {
+
+    playButton.dataset.state = 'start';
+    playButton.innerHTML = '<span class="play"></span> Play';
+
+  } else if( state == 'started' ) {
+
+    playButton.dataset.state = 'stop';
+    playButton.innerHTML = '<span class="stop"></span> Stop';
+    part.start();
+  }
+}
 // Fire play function or stop on click event on play/stop button
 playButton.addEventListener('click', function(e) {
 
-  if( part.state == "started") {
+  if( playButton.dataset.state == 'start' ) {
+
     Tone.Transport.stop();
-
-    playButton.classList = '';
-    playButton.innerHTML = '<span class="play"></span> Play';
-    part.stop(0);
-    Tone.Transport.stop();
-
-
-
-  } else if( part.state !== 'started') {
-    Tone.Transport.stop();
-
-    //make_sound();
     play_sound();
+    play_button_behaviour('started');
 
-    playButton.classList = 'active';
-    playButton.innerHTML = '<span class="stop"></span> Stop';
+  } else if( playButton.dataset.state == 'stop' ) {
 
-    part.start();
-
+    part.stop(0);
+    Tone.Transport.stop(0);
+    play_button_behaviour('stopped');
   }
 
 });
@@ -73,6 +81,7 @@ transposeSlider.addEventListener('input', function() {
     Tone.Transport.stop();
 		transpose = Number(transposeSlider.value);
     transposeOutput.innerHTML = transpose;
+
 
 }, false);
 
@@ -90,23 +99,30 @@ function make_sound() {
       var time =  Math.round(1000*transmitanceHit[n].transmitance)/1000;
       duration = duration + time;
     }
+    if( duration > 1.99 ) {
+      totalTimeLabel.innerHTML = duration + ' <span>seconds</span>';
+    } else {
+      totalTimeLabel.innerHTML = duration + ' <span>second</span>';
+    }
+
     for ( var n = 1; n < transmitanceHit.length; n++ ) {
 
         // Transmitance value is use to mode note duration
         // we have to round it for better performance
-        var time =  Math.round(1000*transmitanceHit[n].transmitance)/1000;
+        var time =  (Math.round(1000*transmitanceHit[n].transmitance * stepDurationFactor)/1000);
         // Change the frequency value according to transpose value
         // 1 octave = 20hertz
-        var finalNote = transmitanceHit[n].frequency + ( transpose * 180);
+
+        var finalNote = transmitanceHit[n].frequency + ( transpose * 360);
         var note = {
           'pitch_octave_note': new Tone.Frequency(finalNote, 'midi').toNote(),
           'frequency_note': finalNote,
           'time': time
         };
-        console.log( note.frequency_note + ' => ' + finalNote );
+        // console.log( note.frequency_note + ' => ' + finalNote );
         var visualNote = document.createElement('span');
         visualNote.id = 'note-' + n;
-        visualNote.innerHTML = note.pitch_octave_note;
+        visualNote.innerHTML = note.frequency_note;
         visualNote.style.width = ((note.time / duration) * 100) + '%';
 
         sequenceContainer.appendChild( visualNote );
@@ -148,7 +164,7 @@ function play_sound() {
       var playedNoteId = 'note-' + currentNote;
       var playedNote = document.getElementById(playedNoteId);
 
-      if( playedNote ) {
+      if( playedNote && playButton.dataset.state == 'stop') {
 
           playedNote.classList = 'played';
 
@@ -160,14 +176,306 @@ function play_sound() {
           currentNote++;
 
       }
+      Tone.Transport.schedule(function(time){
+        	//use the time argument to schedule a callback with Tone.Draw
+        	Tone.Draw.schedule(function(){
+
+            play_button_behaviour('stopped');
+
+        	}, time)
+      }, time);
 
     }, notes);
-    // part.start(0);
-    // part.loopEnd = '1m';
+
+    // part.loop = 8;
+    // part.humanize = 'true';
     // part.stop(now + duration);
 
     Tone.Transport.start();
 }
+
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
+var APP = {
+
+	Player: function () {
+
+		var loader = new THREE.ObjectLoader();
+		var camera, scene, renderer;
+
+		var events = {};
+
+		var dom = document.createElement( 'div' );
+
+		this.dom = dom;
+
+		this.width = 500;
+		this.height = 500;
+
+		this.load = function ( json ) {
+
+			renderer = new THREE.WebGLRenderer( { antialias: true } );
+			renderer.setClearColor( 0x000000 );
+			renderer.setPixelRatio( window.devicePixelRatio );
+
+			var project = json.project;
+
+			if ( project.gammaInput ) renderer.gammaInput = true;
+			if ( project.gammaOutput ) renderer.gammaOutput = true;
+			if ( project.shadows ) renderer.shadowMap.enabled = true;
+			if ( project.vr ) renderer.vr.enabled = true;
+
+			dom.appendChild( renderer.domElement );
+
+			this.setScene( loader.parse( json.scene ) );
+			this.setCamera( loader.parse( json.camera ) );
+
+			events = {
+				init: [],
+				start: [],
+				stop: [],
+				keydown: [],
+				keyup: [],
+				mousedown: [],
+				mouseup: [],
+				mousemove: [],
+				touchstart: [],
+				touchend: [],
+				touchmove: [],
+				update: []
+			};
+
+			var scriptWrapParams = 'player,renderer,scene,camera';
+			var scriptWrapResultObj = {};
+
+			for ( var eventKey in events ) {
+
+				scriptWrapParams += ',' + eventKey;
+				scriptWrapResultObj[ eventKey ] = eventKey;
+
+			}
+
+			var scriptWrapResult = JSON.stringify( scriptWrapResultObj ).replace( /\"/g, '' );
+
+			for ( var uuid in json.scripts ) {
+
+				var object = scene.getObjectByProperty( 'uuid', uuid, true );
+
+				if ( object === undefined ) {
+
+					console.warn( 'APP.Player: Script without object.', uuid );
+					continue;
+
+				}
+
+				var scripts = json.scripts[ uuid ];
+
+				for ( var i = 0; i < scripts.length; i ++ ) {
+
+					var script = scripts[ i ];
+
+					var functions = ( new Function( scriptWrapParams, script.source + '\nreturn ' + scriptWrapResult + ';' ).bind( object ) )( this, renderer, scene, camera );
+
+					for ( var name in functions ) {
+
+						if ( functions[ name ] === undefined ) continue;
+
+						if ( events[ name ] === undefined ) {
+
+							console.warn( 'APP.Player: Event type not supported (', name, ')' );
+							continue;
+
+						}
+
+						events[ name ].push( functions[ name ].bind( object ) );
+
+					}
+
+				}
+
+			}
+
+			dispatch( events.init, arguments );
+
+		};
+
+		this.setCamera = function ( value ) {
+
+			camera = value;
+			camera.aspect = this.width / this.height;
+			camera.updateProjectionMatrix();
+
+			if ( renderer.vr.enabled ) {
+
+				dom.appendChild( WEBVR.createButton( renderer ) );
+
+			}
+
+		};
+
+		this.setScene = function ( value ) {
+
+			scene = value;
+
+		};
+
+		this.setSize = function ( width, height ) {
+
+			this.width = width;
+			this.height = height;
+
+			if ( camera ) {
+
+				camera.aspect = this.width / this.height;
+				camera.updateProjectionMatrix();
+
+			}
+
+			if ( renderer ) {
+
+				renderer.setSize( width, height );
+
+			}
+
+		};
+
+		function dispatch( array, event ) {
+
+			for ( var i = 0, l = array.length; i < l; i ++ ) {
+
+				array[ i ]( event );
+
+			}
+
+		}
+
+		var prevTime;
+
+		function animate( time ) {
+
+			try {
+
+				dispatch( events.update, { time: time, delta: time - prevTime } );
+
+			} catch ( e ) {
+
+				console.error( ( e.message || e ), ( e.stack || "" ) );
+
+			}
+
+			renderer.render( scene, camera );
+
+			prevTime = time;
+
+		}
+
+		this.play = function () {
+
+			prevTime = performance.now();
+
+			document.addEventListener( 'keydown', onDocumentKeyDown );
+			document.addEventListener( 'keyup', onDocumentKeyUp );
+			document.addEventListener( 'mousedown', onDocumentMouseDown );
+			document.addEventListener( 'mouseup', onDocumentMouseUp );
+			document.addEventListener( 'mousemove', onDocumentMouseMove );
+			document.addEventListener( 'touchstart', onDocumentTouchStart );
+			document.addEventListener( 'touchend', onDocumentTouchEnd );
+			document.addEventListener( 'touchmove', onDocumentTouchMove );
+
+			dispatch( events.start, arguments );
+
+			renderer.animate( animate );
+
+		};
+
+		this.stop = function () {
+
+			document.removeEventListener( 'keydown', onDocumentKeyDown );
+			document.removeEventListener( 'keyup', onDocumentKeyUp );
+			document.removeEventListener( 'mousedown', onDocumentMouseDown );
+			document.removeEventListener( 'mouseup', onDocumentMouseUp );
+			document.removeEventListener( 'mousemove', onDocumentMouseMove );
+			document.removeEventListener( 'touchstart', onDocumentTouchStart );
+			document.removeEventListener( 'touchend', onDocumentTouchEnd );
+			document.removeEventListener( 'touchmove', onDocumentTouchMove );
+
+			dispatch( events.stop, arguments );
+
+			renderer.animate( null );
+
+		};
+
+		this.dispose = function () {
+
+			while ( dom.children.length ) {
+
+				dom.removeChild( dom.firstChild );
+
+			}
+
+			renderer.dispose();
+
+			camera = undefined;
+			scene = undefined;
+			renderer = undefined;
+
+		};
+
+		//
+
+		function onDocumentKeyDown( event ) {
+
+			dispatch( events.keydown, event );
+
+		}
+
+		function onDocumentKeyUp( event ) {
+
+			dispatch( events.keyup, event );
+
+		}
+
+		function onDocumentMouseDown( event ) {
+
+			dispatch( events.mousedown, event );
+
+		}
+
+		function onDocumentMouseUp( event ) {
+
+			dispatch( events.mouseup, event );
+
+		}
+
+		function onDocumentMouseMove( event ) {
+
+			dispatch( events.mousemove, event );
+
+		}
+
+		function onDocumentTouchStart( event ) {
+
+			dispatch( events.touchstart, event );
+
+		}
+
+		function onDocumentTouchEnd( event ) {
+
+			dispatch( events.touchend, event );
+
+		}
+
+		function onDocumentTouchMove( event ) {
+
+			dispatch( events.touchmove, event );
+
+		}
+
+	}
+
+};
 
 /**!
  * File: dropdown.js
@@ -184,7 +492,7 @@ dropdowns.forEach(function( dropdown ) {
         e.preventDefault();
         var targetId = this.parentElement.id;
         document.getElementById(targetId).classList.toggle('active');
-
+        stopPart();
 
     }, false);
 
@@ -199,6 +507,28 @@ dropdowns.forEach(function( dropdown ) {
         });
     });
 });
+
+/**!
+ * File light-synthesis.js
+ */
+
+var canvasWrapper = document.getElementById('canvas-3d-wrapper');
+var canvasWidth = canvasWrapper.clientWidth;
+var canvasHeight = canvasWrapper.clientHeight;
+
+var loader = new THREE.FileLoader();
+loader.load( 'data/app.json', function ( text ) {
+
+		var player = new APP.Player();
+		player.load( JSON.parse( text ) );
+		player.setSize( canvasWidth, canvasHeight );
+		player.play();
+
+		canvasWrapper.appendChild( player.dom );
+		window.addEventListener( 'resize', function () {
+				player.setSize( window.innerWidth, window.innerHeight );
+		} );
+} );
 
 /**
  * Infrared spectrum reinterpretation
@@ -242,24 +572,26 @@ molecules_entry.forEach( function( molecule ) {
 // Return input range value
 // 1. Transmitance threshold
 transmitanceThresholdSlider.addEventListener('input', function() {
-
 		transmitanceThreshold = transmitanceThresholdSlider.value / 1000;
     transmitanceThresholdOutput.innerHTML = transmitanceThreshold;
-		getTransmitanceHit();
-		make_sound();
 
 }, false);
+transmitanceThresholdSlider.addEventListener('mouseup', function() {
+		getTransmitanceHit();
+		make_sound();
+});
 
 // 2. Step duration factor
 stepDurationFactorSlider.addEventListener('input', function() {
 
 		stepDurationFactor = stepDurationFactorSlider.value / 10;
     stepDurationFactorOutput.innerHTML = stepDurationFactor;
-		getTransmitanceHit();
-		make_sound();
 
 }, false);
 
+stepDurationFactorSlider.addEventListener('mouseup', function() {
+    make_sound();
+});
 
 
 // Gt the content of the .jdx file

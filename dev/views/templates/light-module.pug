@@ -1,0 +1,16 @@
+div.module--input
+  h3 Light reinterpretation
+  form(method="POST" id="light-parameter")
+    fieldset
+      label(for="oscillator-type-dropdown").
+        Current color:
+        #[output#current-oscillator-type-output]  
+      input(type="color")
+          
+    button(id="playLight" type="button" name="playLight" data-state="start").
+      #[span.play]
+      Play
+// .module--input
+div.module--output
+  div(id="canvas-3d-wrapper")
+// .module--output

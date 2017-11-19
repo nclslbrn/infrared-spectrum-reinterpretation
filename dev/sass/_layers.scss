@@ -1,4 +1,7 @@
 body {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -35,6 +38,16 @@ body {
     width: 19%;
     padding: 1rem 1%;
     float: right;
+
+    div.logo {
+      display: block;
+      margin-bottom: 2rem;
+      width: 100%;
+      padding-bottom: 80%;
+      background: url(../images/logo.svg);
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
   }
   footer {
     display: block;

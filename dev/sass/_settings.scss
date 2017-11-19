@@ -3,19 +3,20 @@
 /**
  * Dark pink
  */
- /*
+/*
 $background_color: #310052;
 $text_color: #FFDEF6;
 $primary_color: #850D66;
+$secondary_color: adjust-hue($primary_color, -5%);
 */
 
 /**
  * light gray
  */
 /*
-$background_color: #fefefe;
+$background_color: #fff;
 $text_color: #333;
-$primary_color: #87ef59;
+$primary_color: #B0BEC5;
 $secondary_color: adjust-hue($primary_color, -10%);
 */
 
@@ -25,7 +26,8 @@ $secondary_color: adjust-hue($primary_color, -10%);
 /*
 $background_color: #3D3D3D;
 $text_color: #EBEBEB;
-$primary_color: #697065;
+$primary_color: #76a50b;
+$secondary_color: adjust-hue($primary_color, 15%);
 */
 
 /**
@@ -37,11 +39,7 @@ $text_color: #E8DDCB;
 $primary_color: #036564;
 $secondary_color: lighten(adjust-hue($primary_color, -10%), 20%);
 
-
-
-
-$heading_font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-$body_font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-
+$heading_font: 'Inter UI', sans-serif;
+$body_font: 'Inter UI', sans-serif;
 
 $animation: .35s ease-in-out;

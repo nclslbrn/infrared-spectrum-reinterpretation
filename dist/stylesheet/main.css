@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**!
  * Infrared spectrum reinterpretation
  *
@@ -6,6 +7,7 @@
  * @license MIT
  * @version 1.0.0
  */
+@import url("https://rsms.me/inter/inter-ui.css");
 /**
  * Dark pink
  */
@@ -13,14 +15,15 @@
 $background_color: #310052;
 $text_color: #FFDEF6;
 $primary_color: #850D66;
+$secondary_color: adjust-hue($primary_color, -5%);
 */
 /**
  * light gray
  */
 /*
-$background_color: #fefefe;
+$background_color: #fff;
 $text_color: #333;
-$primary_color: #87ef59;
+$primary_color: #B0BEC5;
 $secondary_color: adjust-hue($primary_color, -10%);
 */
 /**
@@ -29,16 +32,69 @@ $secondary_color: adjust-hue($primary_color, -10%);
 /*
 $background_color: #3D3D3D;
 $text_color: #EBEBEB;
-$primary_color: #697065;
+$primary_color: #76a50b;
+$secondary_color: adjust-hue($primary_color, 15%);
 */
 /**
  * dark green
  */
+.noscroll {
+  position: fixed;
+  overflow: hidden; }
+
+#overlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #022431; }
+
+#spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 671px;
+  height: 539px;
+  margin-top: -300px;
+  margin-left: -335px;
+  z-index: 999; }
+
+@-webkit-keyframes play120 {
+  0% {
+    background-position: 0px 0px; }
+  100% {
+    background-position: -80520px 0px; } }
+
+@keyframes play120 {
+  0% {
+    background-position: 0px 0px; }
+  100% {
+    background-position: -80520px 0px; } }
+
+.shapeshifter {
+  -webkit-animation-duration: 2000ms;
+  animation-duration: 2000ms;
+  -webkit-animation-timing-function: steps(120);
+  animation-timing-function: steps(120);
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  width: 671px;
+  height: 539px;
+  background-repeat: no-repeat; }
+
+.shapeshifter.play {
+  -webkit-animation-name: play120;
+  animation-name: play120; }
+
 html {
   font-size: 1em; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Inter UI", sans-serif;
   font-weight: 400;
   line-height: 1.45;
   color: #E8DDCB; }
@@ -47,9 +103,9 @@ p {
   margin-bottom: 1.3em; }
 
 h1, h2, h3, h4 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Inter UI", sans-serif;
   margin: 1.414em 0 0.5em;
-  font-weight: inherit;
+  font-weight: bolder;
   line-height: 1.2; }
 
 h1 {
@@ -86,6 +142,10 @@ aside h2,
 
 .app-module label {
   text-align: center; }
+
+aside h2 {
+  white-space: pre-line;
+  font-size: 2.04vw; }
 
 #data-comments p {
   font-size: 1em;
@@ -142,6 +202,9 @@ aside h2,
   transform: translate(0); }
 
 body {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
@@ -175,6 +238,15 @@ body {
     width: 19%;
     padding: 1rem 1%;
     float: right; }
+    .app-wrapper aside div.logo {
+      display: block;
+      margin-bottom: 2rem;
+      width: 100%;
+      padding-bottom: 80%;
+      background: url(../images/logo.svg);
+      background-repeat: no-repeat;
+      -webkit-background-size: contain;
+      background-size: contain; }
   .app-wrapper footer {
     display: block;
     clear: both;
@@ -275,7 +347,8 @@ dl.dropdown {
 
 .area-chart .legend {
   color: #E8DDCB;
-  font-size: 18px; }
+  font-size: 12px;
+  font-weight: lighter; }
 
 form {
   position: relative;
@@ -298,8 +371,10 @@ input {
   text-align: center;
   outline: none;
   border: 0;
-  border-radius: 0; }
+  border-radius: 0;
+  background: transparent; }
 
+canvas,
 input {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -384,16 +459,33 @@ button span.stop {
     flex-basis: 75%;
     background-color: #022835; }
 
-#sound-module.app-module .module--output > div {
+#sound-module.app-module .module--output output#total-time,
+#sound-module.app-module .module--output div#resulted-sequence {
   position: relative;
   display: block;
   margin: 2rem;
   padding: .25rem;
-  height: 4rem;
   border: 1px solid #04445d; }
-  #sound-module.app-module .module--output > div span {
+
+#sound-module.app-module .module--output output#total-time {
+  padding: .25rem .5rem;
+  font-size: 1.2em;
+  color: #E8DDCB; }
+
+#sound-module.app-module .module--output output#total-time span {
+  color: #06c8a6; }
+
+#sound-module.app-module .module--output div#resulted-sequence {
+  clear: both;
+  float: none; }
+  #sound-module.app-module .module--output div#resulted-sequence::after {
+    content: '';
+    display: table;
+    clear: both;
+    float: none; }
+  #sound-module.app-module .module--output div#resulted-sequence span {
     position: relative;
-    display: inline-block;
+    display: block;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     float: left;
@@ -404,9 +496,31 @@ button span.stop {
     line-height: 4rem;
     overflow: hidden;
     background-color: #06c8a6;
+    border-top: 1px solid #022835;
     border-right: 1px solid #022835; }
-  #sound-module.app-module .module--output > div span.played {
+  #sound-module.app-module .module--output div#resulted-sequence span.played {
     background-color: #E8DDCB; }
+
+#light-module.app-module .module--output {
+  position: relative;
+  min-height: 20rem; }
+  #light-module.app-module .module--output #canvas-3d-wrapper {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%; }
+    #light-module.app-module .module--output #canvas-3d-wrapper canvas {
+      display: block;
+      border: none !important;
+      padding: 0;
+      margin: 0;
+      outline: none; }
+      #light-module.app-module .module--output #canvas-3d-wrapper canvas:focus {
+         border: none; }
 
 #data-comments {
   margin-top: .5rem;

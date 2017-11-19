@@ -49,23 +49,63 @@ html(lang="fr")
   
   include templates/head.pug
   
-  body
+  body(class="no-scroll")
+        
+    div(id="overlay")
+      
+    div(id="spinner" class="shapeshifter play" style="background-image: url(images/sprite_60fps.svg)")
+      
     div(class="app-wrapper")
       main
         div#chart-module.app-module
           include templates/chart-module.pug
         // #chart-module.app-module
+        
         div#sound-module.app-module
           include templates/sound-module.pug
         // #sound-module.app-module
+        
+        div#light-module.app-module
+          include templates/light-module.pug
+        // #light-module.app-module
+        
       // main    
+      
       aside
         include templates/aside.pug
       // aside
+      
       footer
         include templates/footer.pug
       // footer
+      
       div#comment-source-file-modal.modal
         include templates/modal.pug
       // #comment-source-file-modal.modal
+      
+      script.
+        document.body.setAttribute("class", "noscroll");
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("spinner").style.display = "block";
+        
+        //  window.onload = function() {
+        //      document.getElementById("spinner").style.display = "none";
+        //      document.getElementById("overlay").style.display = "none";
+
+        //      document.body.className = document.body.className.replace(/\bnoscroll\b/,'');
+        //  }
+        
+        var chkReadyState = setInterval(function() {
+            if (document.readyState == "complete") {
+                // clear the interval
+                clearInterval(chkReadyState);
+                // finally your page is loaded.
+                document.getElementById("spinner").style.display = "none";
+                document.getElementById("overlay").style.display = "none";
+
+                document.body.className = document.body.className.replace(/\bnoscroll\b/,'');
+            }
+        }, 1000);
+      // loader script  
+      
       include templates/scripts.pug

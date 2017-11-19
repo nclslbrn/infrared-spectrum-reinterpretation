@@ -26,12 +26,13 @@ div.module--input
         #[output#transposeOutput]
       input(type="range" min="-50" max="50" value="0" class="slider" id="transpose")
       
-    button(id="playSound" type="button" name="playSound").
+    button(id="playSound" type="button" name="playSound" data-state="start").
       #[span.play]
       Play
               
       
 // .module--input
 div.module--output
+  output#total-time
   div#resulted-sequence
 // .module--output

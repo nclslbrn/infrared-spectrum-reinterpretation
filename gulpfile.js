@@ -36,7 +36,7 @@ var directory = {
       do: 'dev/views/*.pug'
     },
     lib: 'lib/*',
-    data: 'data/*',
+    data: 'data/**/*',
   },
   dist : {
     styles: 'dist/stylesheet/',

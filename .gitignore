@@ -1,5 +1,5 @@
-data/*.jdx
+dist/data/jdx/*.jdx
+data/jdx/*.jdx
 gulp-tasks/ftp-deploy.js
-dist/data/*.jdx
 node_modules/*
 .DS_Store

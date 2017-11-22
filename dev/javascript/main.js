@@ -87,7 +87,7 @@ get_JDX_data = function loadJDX(filePath, success, error) {
 
 // Load a default file
 // Usefull for development
-get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
+get_JDX_data('data/jdx/7732-18-5-IR.jdx',  filter_JDX_data);
 
 // Filter the source file
 function filter_JDX_data(data) {
@@ -158,6 +158,8 @@ function filter_JDX_data(data) {
 
 		// fire our function to make sound
 		make_sound();
+
+		// fire our function to make 3D
 }
 
 

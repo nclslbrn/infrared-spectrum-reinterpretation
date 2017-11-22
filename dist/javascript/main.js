@@ -194,289 +194,6 @@ function play_sound() {
     Tone.Transport.start();
 }
 
-/**
- * @author mrdoob / http://mrdoob.com/
- */
-
-var APP = {
-
-	Player: function () {
-
-		var loader = new THREE.ObjectLoader();
-		var camera, scene, renderer;
-
-		var events = {};
-
-		var dom = document.createElement( 'div' );
-
-		this.dom = dom;
-
-		this.width = 500;
-		this.height = 500;
-
-		this.load = function ( json ) {
-
-			renderer = new THREE.WebGLRenderer( { antialias: true } );
-			renderer.setClearColor( 0x000000 );
-			renderer.setPixelRatio( window.devicePixelRatio );
-
-			var project = json.project;
-
-			if ( project.gammaInput ) renderer.gammaInput = true;
-			if ( project.gammaOutput ) renderer.gammaOutput = true;
-			if ( project.shadows ) renderer.shadowMap.enabled = true;
-			if ( project.vr ) renderer.vr.enabled = true;
-
-			dom.appendChild( renderer.domElement );
-
-			this.setScene( loader.parse( json.scene ) );
-			this.setCamera( loader.parse( json.camera ) );
-
-			events = {
-				init: [],
-				start: [],
-				stop: [],
-				keydown: [],
-				keyup: [],
-				mousedown: [],
-				mouseup: [],
-				mousemove: [],
-				touchstart: [],
-				touchend: [],
-				touchmove: [],
-				update: []
-			};
-
-			var scriptWrapParams = 'player,renderer,scene,camera';
-			var scriptWrapResultObj = {};
-
-			for ( var eventKey in events ) {
-
-				scriptWrapParams += ',' + eventKey;
-				scriptWrapResultObj[ eventKey ] = eventKey;
-
-			}
-
-			var scriptWrapResult = JSON.stringify( scriptWrapResultObj ).replace( /\"/g, '' );
-
-			for ( var uuid in json.scripts ) {
-
-				var object = scene.getObjectByProperty( 'uuid', uuid, true );
-
-				if ( object === undefined ) {
-
-					console.warn( 'APP.Player: Script without object.', uuid );
-					continue;
-
-				}
-
-				var scripts = json.scripts[ uuid ];
-
-				for ( var i = 0; i < scripts.length; i ++ ) {
-
-					var script = scripts[ i ];
-
-					var functions = ( new Function( scriptWrapParams, script.source + '\nreturn ' + scriptWrapResult + ';' ).bind( object ) )( this, renderer, scene, camera );
-
-					for ( var name in functions ) {
-
-						if ( functions[ name ] === undefined ) continue;
-
-						if ( events[ name ] === undefined ) {
-
-							console.warn( 'APP.Player: Event type not supported (', name, ')' );
-							continue;
-
-						}
-
-						events[ name ].push( functions[ name ].bind( object ) );
-
-					}
-
-				}
-
-			}
-
-			dispatch( events.init, arguments );
-
-		};
-
-		this.setCamera = function ( value ) {
-
-			camera = value;
-			camera.aspect = this.width / this.height;
-			camera.updateProjectionMatrix();
-
-			if ( renderer.vr.enabled ) {
-
-				dom.appendChild( WEBVR.createButton( renderer ) );
-
-			}
-
-		};
-
-		this.setScene = function ( value ) {
-
-			scene = value;
-
-		};
-
-		this.setSize = function ( width, height ) {
-
-			this.width = width;
-			this.height = height;
-
-			if ( camera ) {
-
-				camera.aspect = this.width / this.height;
-				camera.updateProjectionMatrix();
-
-			}
-
-			if ( renderer ) {
-
-				renderer.setSize( width, height );
-
-			}
-
-		};
-
-		function dispatch( array, event ) {
-
-			for ( var i = 0, l = array.length; i < l; i ++ ) {
-
-				array[ i ]( event );
-
-			}
-
-		}
-
-		var prevTime;
-
-		function animate( time ) {
-
-			try {
-
-				dispatch( events.update, { time: time, delta: time - prevTime } );
-
-			} catch ( e ) {
-
-				console.error( ( e.message || e ), ( e.stack || "" ) );
-
-			}
-
-			renderer.render( scene, camera );
-
-			prevTime = time;
-
-		}
-
-		this.play = function () {
-
-			prevTime = performance.now();
-
-			document.addEventListener( 'keydown', onDocumentKeyDown );
-			document.addEventListener( 'keyup', onDocumentKeyUp );
-			document.addEventListener( 'mousedown', onDocumentMouseDown );
-			document.addEventListener( 'mouseup', onDocumentMouseUp );
-			document.addEventListener( 'mousemove', onDocumentMouseMove );
-			document.addEventListener( 'touchstart', onDocumentTouchStart );
-			document.addEventListener( 'touchend', onDocumentTouchEnd );
-			document.addEventListener( 'touchmove', onDocumentTouchMove );
-
-			dispatch( events.start, arguments );
-
-			renderer.animate( animate );
-
-		};
-
-		this.stop = function () {
-
-			document.removeEventListener( 'keydown', onDocumentKeyDown );
-			document.removeEventListener( 'keyup', onDocumentKeyUp );
-			document.removeEventListener( 'mousedown', onDocumentMouseDown );
-			document.removeEventListener( 'mouseup', onDocumentMouseUp );
-			document.removeEventListener( 'mousemove', onDocumentMouseMove );
-			document.removeEventListener( 'touchstart', onDocumentTouchStart );
-			document.removeEventListener( 'touchend', onDocumentTouchEnd );
-			document.removeEventListener( 'touchmove', onDocumentTouchMove );
-
-			dispatch( events.stop, arguments );
-
-			renderer.animate( null );
-
-		};
-
-		this.dispose = function () {
-
-			while ( dom.children.length ) {
-
-				dom.removeChild( dom.firstChild );
-
-			}
-
-			renderer.dispose();
-
-			camera = undefined;
-			scene = undefined;
-			renderer = undefined;
-
-		};
-
-		//
-
-		function onDocumentKeyDown( event ) {
-
-			dispatch( events.keydown, event );
-
-		}
-
-		function onDocumentKeyUp( event ) {
-
-			dispatch( events.keyup, event );
-
-		}
-
-		function onDocumentMouseDown( event ) {
-
-			dispatch( events.mousedown, event );
-
-		}
-
-		function onDocumentMouseUp( event ) {
-
-			dispatch( events.mouseup, event );
-
-		}
-
-		function onDocumentMouseMove( event ) {
-
-			dispatch( events.mousemove, event );
-
-		}
-
-		function onDocumentTouchStart( event ) {
-
-			dispatch( events.touchstart, event );
-
-		}
-
-		function onDocumentTouchEnd( event ) {
-
-			dispatch( events.touchend, event );
-
-		}
-
-		function onDocumentTouchMove( event ) {
-
-			dispatch( events.touchmove, event );
-
-		}
-
-	}
-
-};
-
 /**!
  * File: dropdown.js
  */
@@ -515,9 +232,9 @@ dropdowns.forEach(function( dropdown ) {
 var canvasWrapper = document.getElementById('canvas-3d-wrapper');
 var canvasWidth = canvasWrapper.clientWidth;
 var canvasHeight = canvasWrapper.clientHeight;
-
+/*
 var loader = new THREE.FileLoader();
-loader.load( 'data/app.json', function ( text ) {
+loader.load( 'data/json/app.json', function ( text ) {
 
 		var player = new APP.Player();
 		player.load( JSON.parse( text ) );
@@ -525,10 +242,68 @@ loader.load( 'data/app.json', function ( text ) {
 		player.play();
 
 		canvasWrapper.appendChild( player.dom );
-		window.addEventListener( 'resize', function () {
-				player.setSize( window.innerWidth, window.innerHeight );
-		} );
+
+
 } );
+*/
+var camera, scene, renderer;
+var lights = [];
+var lightsPositions = [
+	[ 3, 3.4, -23], [ -7, 3.4, -23],
+	[ 3, 3.4, -16.6], [ -7, 3.4, -16.6],
+	[ 3, 3.4, -9.7], [ -7, 3.4, -9,7],
+	[ 3, 3.4, -3.2], [ -7, 3.4, -3.2],
+	[ 3, 3.4, 3.2], [ -7, 3.4, 3.2],
+	[ 3, 3.4, 9.7],	[ -7, 3.4, 9,7]];
+init();
+animate();
+
+function init() {
+
+		camera = new THREE.PerspectiveCamera( 45, canvasWidth / canvasHeight, 1, 2000 );
+		camera.position.set( 1.48, 1, 12 );
+
+		// scene
+		scene = new THREE.Scene();
+		scene.fog = new THREE.Fog(0xffffff, 0.5, 40);
+
+		for( var i = 0; i < lightsPositions.length; i++) {
+
+			lights[i] = new THREE.PointLight( 0xffffff, Math.random(0, .5), 0 );
+			lights[i].position.set( lightsPositions[i][0], lightsPositions[i][1], lightsPositions[i][2]);
+			scene.add( lights[i] );
+		}
+
+		// BEGIN Clara.io JSON loader code
+		var objectLoader = new THREE.ObjectLoader();
+
+		objectLoader.load("data/json/room-model.json", function ( object ) {
+				//object.scale.set(5, 5, 5);
+				object.receiveShadow = true;
+				object.castShadow = true;
+				scene.add( object );
+		} );
+		renderer = new THREE.WebGLRenderer();
+		renderer.setPixelRatio( window.devicePixelRatio );
+		renderer.setSize( canvasWidth, canvasHeight );
+		canvasWrapper.appendChild( renderer.domElement );
+
+		window.addEventListener( 'resize', function () {
+				renderer.setSize( canvasWidth, canvasHeight );
+		} );
+}
+
+function animate() {
+		for(var i = 0; i < lights.length; i++ ){
+			lights[i].power = Math.random(0, 1);
+		}
+		requestAnimationFrame( animate );
+		render();
+}
+function render() {
+		//camera.lookAt( scene.position );
+		renderer.render( scene, camera );
+}
 
 /**
  * Infrared spectrum reinterpretation
@@ -619,7 +394,7 @@ get_JDX_data = function loadJDX(filePath, success, error) {
 
 // Load a default file
 // Usefull for development
-get_JDX_data('data/7732-18-5-IR.jdx',  filter_JDX_data);
+get_JDX_data('data/jdx/7732-18-5-IR.jdx',  filter_JDX_data);
 
 // Filter the source file
 function filter_JDX_data(data) {
@@ -690,6 +465,8 @@ function filter_JDX_data(data) {
 
 		// fire our function to make sound
 		make_sound();
+
+		// fire our function to make 3D
 }
 
 
